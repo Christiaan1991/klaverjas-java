@@ -1,4 +1,4 @@
-package mancala.api.models;
+package klaverjas.api.models;
 
 public class GameStatus {
     boolean endOfGame;
@@ -7,18 +7,18 @@ public class GameStatus {
     String winner;
     public String getWinner() { return winner; }
 
-    public GameStatus(mancala.domain.Mancala mancala, 
-            String namePlayer1, String namePlayer2) {
-        this.endOfGame = mancala.isEndOfGame();
-        int winner = mancala.getWinner();
-        if(winner == mancala.NO_PLAYERS) {
+    public GameStatus(klaverjas.domain.Klaverjas klaverjas,
+            String namePlayer1, String namePlayer2, String namePlayer3, String nameplayer4) {
+        this.endOfGame = klaverjas.isEndOfGame();
+        int winner = klaverjas.getWinner();
+        if(winner == klaverjas.NO_TEAM) {
             this.winner = null;
-        } else if(winner == mancala.PLAYER_ONE) {
-            this.winner = namePlayer1;
-        } else if(winner == mancala.PLAYER_TWO) {
-            this.winner = namePlayer2;
+        } else if(winner == klaverjas.TEAM_ONE) {
+            this.winner = "Team 1";
+        } else if(winner == klaverjas.TEAM_TWO) {
+            this.winner = "Team 2";
         } else {
-            this.winner = namePlayer1  + "and" + namePlayer2;
+            this.winner = "Team 1 "  + "and" + "Team 2";
         }
     }
 }

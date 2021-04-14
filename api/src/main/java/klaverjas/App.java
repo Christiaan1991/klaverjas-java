@@ -1,4 +1,4 @@
-package mancala;
+package klaverjas;
 
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
@@ -9,7 +9,7 @@ import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.glassfish.jersey.servlet.ServletContainer;
 
-import mancala.api.*;
+import klaverjas.api.*;
 
 public class App {
     public static void main(String[] args) throws Exception {
@@ -38,12 +38,12 @@ public class App {
 
     private static void registerServlets(ServletContextHandler context) {
         // Use the Jersey framework to translate the classes in the
-        // mancala.api package to server endpoints (servlets).
-        // For example, the StartMancala class will become an endpoint at
-        // http://localost:8080/mancala/api/start
-        ServletHolder serverHolder = context.addServlet(ServletContainer.class, "/mancala/api/*");
+        // klaverjas.api package to server endpoints (servlets).
+        // For example, the StartKlaverjas class will become an endpoint at
+        // http://localost:8080/klaverjas/api/start
+        ServletHolder serverHolder = context.addServlet(ServletContainer.class, "/klaverjas/api/*");
         serverHolder.setInitOrder(1);
         serverHolder.setInitParameter("jersey.config.server.provider.packages", 
-                "mancala.api");
+                "klaverjas.api");
     }
 }

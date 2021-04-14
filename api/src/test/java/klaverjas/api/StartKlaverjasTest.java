@@ -1,6 +1,6 @@
-package mancala.api;
+package klaverjas.api;
 
-import mancala.domain.MancalaException;
+import klaverjas.domain.KlaverjasException;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -8,75 +8,84 @@ import static org.mockito.Mockito.*;
 import jakarta.servlet.http.*;
 import jakarta.ws.rs.core.*;
 
-import mancala.api.models.*;
-import mancala.domain.MancalaImpl;
+import klaverjas.api.models.*;
+import klaverjas.domain.KlaverjasImpl;
 
-public class StartMancalaTest {
+public class StartKlaverjasTest {
+
     @Test
-    public void startingMancalaShouldBeAllowed() {
-        var response = startMancala("Mario", "Luigi");
+    public void startingKlaverjassenShouldBeAllowed() {
+        var response = startKlaverjas("Mario", "Luigi", "Bowser", "Peach");
         assertEquals(200, response.getStatus());
     }
 
     @Test
-    public void startingMancalaReturnsAGameWithoutAWinner() {
-        var response = startMancala("Mario", "Luigi");
-        var entity = (Mancala)response.getEntity();
+    public void startingKlaverjassenReturnsAGameWithoutAWinner() {
+        var response = startKlaverjas("Mario", "Luigi", "Bowser", "Peach");
+        var entity = (Klaverjas)response.getEntity();
         var gameState = entity.getGameStatus();
         assertFalse(gameState.getEndOfGame());
         assertNull(gameState.getWinner());
     }
 
     @Test
-    public void startingMancalaReturnsThePlayerData() {
-        var response = startMancala("Mario", "Luigi");
-        var entity = (Mancala)response.getEntity();
+    public void startingKlaverjassenReturnsThePlayerData() {
+        var response = startKlaverjas("Mario", "Luigi", "Bowser", "Peach");
+        var entity = (Klaverjas)response.getEntity();
         var players = entity.getPlayers();
-        assertEquals(2, players.length);
+        assertEquals(4, players.length);
         assertEquals("Mario", players[0].getName());
         assertEquals("Luigi", players[1].getName());
+        assertEquals("Bowser", players[2].getName());
+        assertEquals("Peach", players[3].getName());
     }
 
     @Test
-    public void startingMancalaReturnsThePits() {
-        var response = startMancala("Mario", "Luigi");
-        var entity = (Mancala)response.getEntity();
+    public void startingKlaverjassenReturnsCardsToPlayers() {
+        var response = startKlaverjas("Mario", "Luigi", "Bowser", "Peach");
+        var entity = (Klaverjas)response.getEntity();
         var players = entity.getPlayers();
-        assertEquals(7, players[0].getPits().length);
-        assertEquals(0, players[0].getPits()[0].getIndex());
-        assertEquals(4, players[0].getPits()[0].getNrOfStones());
-        assertEquals(0, players[0].getPits()[6].getNrOfStones());
-        assertEquals(7, players[1].getPits().length);
-        assertEquals(7, players[1].getPits()[0].getIndex());
-        assertEquals(4, players[1].getPits()[0].getNrOfStones());
-        assertEquals(0, players[1].getPits()[6].getNrOfStones());
+        assertEquals(8, players[0].getCards().length);
+        assertEquals(8, players[1].getCards().length);
+        assertEquals(8, players[2].getCards().length);
+        assertEquals(8, players[3].getCards().length);
+
+        assertTrue(players[0].getCards()[0].isCard());
+        assertTrue(players[1].getCards()[0].isCard());
+        assertTrue(players[2].getCards()[0].isCard());
+        assertTrue(players[3].getCards()[0].isCard());
+
         assertTrue(players[0].getHasTurn());
         assertFalse(players[1].getHasTurn());
+        assertFalse(players[2].getHasTurn());
+        assertFalse(players[3].getHasTurn());
     }
 
     @Test
-    public void startingMancalaStartsANewSession() {
-        startMancala("Mario", "Luigi");
+    public void startingKlaverjassenStartsANewSession() {
+        startKlaverjas("Mario", "Luigi", "Bowser", "Peach");
         verify(request).getSession(true);
     }
 
     @Test
-    public void startingMancalaSavesTheNewGameInASession() {
-        startMancala("Mario", "Luigi");
-        verify(session).setAttribute(eq("mancala"), any(MancalaImpl.class));
+    public void startingKlaverjassenSavesTheNewGameInASession() {
+        startKlaverjas("Mario", "Luigi", "Bowser", "Peach");
+        verify(session).setAttribute(eq("klaverjas"), any(KlaverjasImpl.class));
     }
 
     @Test
     public void startingMancalaSavesTheNamesInASession() {
-        startMancala("Mario", "Luigi");
+        startKlaverjas("Mario", "Luigi", "Bowser", "Peach");
         verify(session).setAttribute("player1", "Mario");
         verify(session).setAttribute("player2", "Luigi");
+        verify(session).setAttribute("player3", "Bowser");
+        verify(session).setAttribute("player4", "Peach");
     }
 
-    private Response startMancala(String namePlayer1, String namePlayer2) {
-        var servlet = new StartMancala();
+    private Response startKlaverjas(String namePlayer1, String namePlayer2, String namePlayer3, String namePlayer4) {
+        var servlet = new StartKlaverjas();
         var request = createRequestContext();
-        var input = playerInput(namePlayer1, namePlayer2);
+        var input = playerInput(namePlayer1, namePlayer2, namePlayer3, namePlayer4);
         return servlet.initialize(request, input);
     }
 
@@ -90,10 +99,12 @@ public class StartMancalaTest {
     private HttpServletRequest request;
     private HttpSession session;
 
-    private PlayerInput playerInput(String namePlayer1, String namePlayer2) {
+    private PlayerInput playerInput(String namePlayer1, String namePlayer2, String namePlayer3, String namePlayer4) {
         var input = new PlayerInput();
         input.setNameplayer1(namePlayer1);
         input.setNameplayer2(namePlayer2);
+        input.setNameplayer3(namePlayer3);
+        input.setNameplayer4(namePlayer4);
         return input;
     }
 }

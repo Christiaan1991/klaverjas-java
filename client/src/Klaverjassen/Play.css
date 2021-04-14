@@ -1,0 +1,75 @@
+/** Add some styles */
+
+.cards {
+
+  display: inline-block;
+  width: 4.5em;
+  height: 6.9em;
+  border: 3px solid #667;
+  border-radius: .3em;
+  -moz-border-radius: .3em;
+  -webkit-border-radius: .3em;
+  -khtml-border-radius: .3em;
+  padding: .25em;
+  margin: 0 .5em .5em 0;
+  text-align: center;
+  font-size: 1.2em; /* @change: adjust this value to make bigger or smaller cards */
+  font-weight: normal;
+  font-family: Tahoma, sans-serif;
+  position: relative;
+  background-color: #fff;
+  -moz-box-shadow: .2em .2em .5em #333;
+  -webkit-box-shadow: .2em .2em .5em #333;
+  box-shadow: .2em .2em .5em #333;
+  
+}
+
+.cardsplayerleft {
+
+  display: block;
+  width: 4.5em;
+  height: 6.9em;
+  border: 3px solid #667;
+  border-radius: .3em;
+  -moz-border-radius: .3em;
+  -webkit-border-radius: .3em;
+  -khtml-border-radius: .3em;
+  padding: .25em;
+  margin: 0 .5em .5em 0;
+  text-align: center;
+  font-size: 1.2em; /* @change: adjust this value to make bigger or smaller cards */
+  font-weight: normal;
+  font-family: Tahoma, sans-serif;
+  position: relative;
+  background-color: #fff;
+  -moz-box-shadow: .2em .2em .5em #333;
+  -webkit-box-shadow: .2em .2em .5em #333;
+  box-shadow: .2em .2em .5em #333;
+  
+}
+
+.cardsplayerright {
+
+  display: block;
+  width: 4.5em;
+  height: 6.9em;
+  border: 3px solid #667;
+  border-radius: .3em;
+  -moz-border-radius: .3em;
+  -webkit-border-radius: .3em;
+  -khtml-border-radius: .3em;
+  padding: .25em;
+  margin: 0 .5em .5em 0;
+  text-align: center;
+  font-size: 1.2em; /* @change: adjust this value to make bigger or smaller cards */
+  font-weight: normal;
+  font-family: Tahoma, sans-serif;
+  position: relative;
+  background-color: #fff;
+  -moz-box-shadow: .2em .2em .5em #333;
+  -webkit-box-shadow: .2em .2em .5em #333;
+  box-shadow: .2em .2em .5em #333;
+  
+}
+
+

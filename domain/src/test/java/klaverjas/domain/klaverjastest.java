@@ -1,152 +1,88 @@
-package mancala.domain;
-
-// Your test class should be in the same
-// package as the class you're testing.
-// Usually the test directory mirrors the
-// main directory 1:1. So for each class in src/main,
-// there is a class in src/test.
-
-// Import our test dependencies. We import the Test-attribute
-// and a set of assertions.
+package klaverjas.domain;
 
 import org.junit.jupiter.api.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class MancalaImplTest {
-
-    /* Create player, which will create the mancala board */
-    MancalaImpl mancala = new MancalaImpl();
+class klaverjastest {
 
     @Nested
-    @DisplayName("Initialization of mancala")
-    class Mancala_intialize {
+    @DisplayName("Initialization of klaverjassen")
+    class klaverjas_intialize {
+
+        /* Create player, which will create the mancala board */
+        KlaverjasImpl klaverjas = new KlaverjasImpl();
 
         @Test
-        @DisplayName("Setup of the Board")
+        @DisplayName("Four players generated")
+        void Team_setup() {
+            assertEquals(4, klaverjas.getPlayers().length);
+        }
+
+        @Test
+        @DisplayName("Players are divided in two teams")
         void Player_setup() {
-            assertAll("start playing field",
-                    () -> assertEquals(4, mancala.getStonesForPit(0)),
-                    () -> assertEquals(4, mancala.getStonesForPit(1)),
-                    () -> assertEquals(4, mancala.getStonesForPit(2)),
-                    () -> assertEquals(4, mancala.getStonesForPit(3)),
-                    () -> assertEquals(4, mancala.getStonesForPit(4)),
-                    () -> assertEquals(4, mancala.getStonesForPit(5)),
-                    () -> assertEquals(0, mancala.getStonesForPit(6)),
-                    () -> assertEquals(4, mancala.getStonesForPit(7)),
-                    () -> assertEquals(4, mancala.getStonesForPit(8)),
-                    () -> assertEquals(4, mancala.getStonesForPit(9)),
-                    () -> assertEquals(4, mancala.getStonesForPit(10)),
-                    () -> assertEquals(4, mancala.getStonesForPit(11)),
-                    () -> assertEquals(4, mancala.getStonesForPit(12)),
-                    () -> assertEquals(0, mancala.getStonesForPit(13)));
+            assertEquals(4, klaverjas.getPlayers().length);
+            assertEquals(6, klaverjas.getPlayers()[0].getTeam());
+            assertEquals(7, klaverjas.getPlayers()[1].getTeam());
+            assertEquals("player1", klaverjas.getPlayers()[0].getName());
+            assertEquals("player2", klaverjas.getPlayers()[1].getName());
+            assertEquals("player3", klaverjas.getPlayers()[2].getName());
+            assertEquals("player4", klaverjas.getPlayers()[3].getName());
+            assertEquals(0, klaverjas.getPlayers()[0].getScore());
+            assertEquals(0, klaverjas.getPlayers()[1].getScore());
         }
     }
 
-    @Test
-    void MancalaMoveFirstPit() throws MancalaException {
+    @Nested
+    @DisplayName("Initialization of a round of klaverjassen")
+        class klaverjas_intialize_round {
 
-        MancalaImpl mancala = new MancalaImpl();
-        mancala.playPit(0);
-        assertAll("Board setup by checking Bowl ID's",
-                () -> assertEquals(0, mancala.getStonesForPit(0)),
-                () -> assertEquals(5, mancala.getStonesForPit(1)),
-                () -> assertEquals(5, mancala.getStonesForPit(2)),
-                () -> assertEquals(5, mancala.getStonesForPit(3)),
-                () -> assertEquals(5, mancala.getStonesForPit(4)),
-                () -> assertEquals(4, mancala.getStonesForPit(5)));
-    }
+        KlaverjasImpl klaverjas = new KlaverjasImpl();
 
-    @Test
-    void MancalaMoveFifthPit() throws MancalaException {
+        @Test
+        @DisplayName("klaverjas game creates a deck of 32 cards")
+        void Deck_setup() {
 
-        MancalaImpl mancala = new MancalaImpl();
-        mancala.playPit(5);
-        assertAll("Board setup by checking Bowl ID's",
-                () -> assertEquals(0, mancala.getStonesForPit(5)),
-                () -> assertEquals(1, mancala.getStonesForPit(6)),
-                () -> assertEquals(5, mancala.getStonesForPit(7)),
-                () -> assertEquals(5, mancala.getStonesForPit(8)),
-                () -> assertEquals(5, mancala.getStonesForPit(9)),
-                () -> assertEquals(4, mancala.getStonesForPit(10)));
-    }
+            assertEquals(32, klaverjas.getDeck().getCards().length);
+            assertEquals(0, klaverjas.getDeck().getCurrentCard());
+        }
 
-    @Test
-    void MancalaMoveOpponentPit() throws MancalaException {
+        @Test
+        @DisplayName("First card of an unshuffled deck is the 7 of Clubs")
+        void Deck_deal_unshuffled() {
+            Card card = klaverjas.getDeck().dealCard();
 
-        MancalaImpl mancala = new MancalaImpl();
-        mancala.playPit(0);
-        mancala.playPit(7);
-        assertAll("Board setup by checking Bowl ID's",
-                () -> assertEquals(0, mancala.getStonesForPit(7)),
-                () -> assertEquals(5, mancala.getStonesForPit(8)),
-                () -> assertEquals(5, mancala.getStonesForPit(9)),
-                () -> assertEquals(5, mancala.getStonesForPit(10)),
-                () -> assertEquals(5, mancala.getStonesForPit(11)),
-                () -> assertEquals(4, mancala.getStonesForPit(12)));
-    }
+            assertEquals(0, card.getRank());
+            assertEquals(0, card.getSuit());
+            assertEquals(0, card.getPoints());
+            assertEquals("7 of Clubs", card.toString());
+            assertEquals(1, klaverjas.getDeck().getCurrentCard());
+        }
 
-    @Test
-    void MancalaMoveOpponentPitThroughMancala() throws MancalaException {
+        @Test
+        @DisplayName("klaverjas game can shuffle deck, and resets current card")
+        void Deck_shuffle() {
 
-        MancalaImpl mancala = new MancalaImpl();
-        mancala.playPit(0);
-        mancala.playPit(11);
-        assertAll("Board setup by checking Bowl ID's",
-                () -> assertEquals(0, mancala.getStonesForPit(11)),
-                () -> assertEquals(5, mancala.getStonesForPit(12)),
-                () -> assertEquals(1, mancala.getStonesForPit(13)),
-                () -> assertEquals(1, mancala.getStonesForPit(0)),
-                () -> assertEquals(6, mancala.getStonesForPit(1)),
-                () -> assertEquals(5, mancala.getStonesForPit(2)));
-    }
+            klaverjas.getDeck().shuffleDeck();
 
-    @Test
-    void MancalaMovePlayerTurn() throws MancalaException {
+            assertEquals(32, klaverjas.getDeck().getCards().length);
+            assertEquals(0, klaverjas.getDeck().getCurrentCard());
+        }
 
-        Mancala mancala = new MancalaImpl();
+        @Test
+        @DisplayName("klaverjas can deal cards to the players")
+        void Deck_deal() {
 
-        //player 1 turn
-        assertTrue(mancala.isPlayersTurn(1));
-        mancala.playPit(1);
+            klaverjas.deal();
 
-        //player 2 turn
-        assertTrue(mancala.isPlayersTurn(2));
-        mancala.playPit(8);
+            assertEquals(8, klaverjas.getPlayers()[0].getHand().size());
+            assertEquals(8, klaverjas.getPlayers()[1].getHand().size());
+            assertEquals(8, klaverjas.getPlayers()[2].getHand().size());
+            assertEquals(8, klaverjas.getPlayers()[3].getHand().size());
 
-        //player 1 turn
-        //perform move which is not allowed!
-        assertTrue(mancala.isPlayersTurn(1));
-        mancala.playPit(9);
-
-        //make sure that it is still player 1 turn!
-        assertTrue(mancala.isPlayersTurn(1));
-
+        }
     }
 
 
-    @Test
-    void MancalaMoveOwnMancalaNotAllowed() throws MancalaException {
-
-        MancalaImpl mancala = new MancalaImpl();
-        assertThrows(NullPointerException.class,
-                ()->{
-                    mancala.playPit(6);
-                    mancala.playPit(12);
-                });
-    }
-
-    @Test
-    void MancalaMoveToOwnKalaha() throws MancalaException {
-
-        MancalaImpl mancala = new MancalaImpl();
-        mancala.playPit(2);
-        assertAll("Board setup by checking Bowl ID's",
-                () -> assertEquals(0, mancala.getStonesForPit(2)),
-                () -> assertEquals(5, mancala.getStonesForPit(3)),
-                () -> assertEquals(5, mancala.getStonesForPit(4)),
-                () -> assertEquals(5, mancala.getStonesForPit(5)),
-                () -> assertEquals(1, mancala.getStonesForPit(6)),
-                () -> assertEquals(4, mancala.getStonesForPit(7)));
-    }
 }

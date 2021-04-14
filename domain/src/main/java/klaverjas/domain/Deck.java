@@ -1,66 +1,44 @@
-package mancala.domain;
+package klaverjas.domain;
 
-/*
- Make your own mancala implementation using your design.
- You can take this stub as an example how to make a
- class inside a package and how to test it.
-*/
+public class Deck {
+    public static final int NCARDS = 32;
+    public static final int NSHUFFLE = 100;
+    private int currentCard;
 
-public class Player {
-	public static final int NONVALID = 2;
-	public static final int WINNER = 3;
+    private Card[] cards;
 
-	private Bowl first_bowl;
+    public Deck(){
+        cards = new Card[NCARDS];
+        currentCard = 0; //used as a counter to keep track which card to deal
 
-	/* default constructor */
-	public Player(int player_id){
-		first_bowl = new Bowl(this, player_id,0, 4); //create first bowl with player_id, bowl_id 0 and 4 stones, and more bowls from there
-	}
+        int i = 0;
+        for(int rank = 0; rank < 8; rank++){
+            for(int suit = 0; suit < 4; suit++){
+                cards[i++] = new Card(rank, suit);
+            }
+        }
+    }
 
-	//second constructor
-	public Player(Player first_player, int player_id){
-		first_bowl = new Bowl(first_player,player_id, 0, 4); //create first bowl with player_id, bowl_id 0 and 4 stones, and more bowls from there
-	}
+    public int getCurrentCard() { return currentCard; }
 
-	public Bowl getFirstBowl() {return first_bowl;}
+    public Card[] getCards() {
+        return cards;
+    }
 
-	public Kalaha getKalahaFirst(){return getFirstBowl().findBowl(5).getKalaha();}
+    public Card dealCard(){ return cards[currentCard++]; }
 
-	public Player getOpponent(){return getKalahaFirst().getNextPlayer();}
+    public void shuffleDeck(){
+        for(int n = 0; n < NSHUFFLE; n++){
+            int old_pos = (int)(NCARDS * Math.random());
+            int new_pos = (int)(NCARDS * Math.random());
 
-	public Bowl getFirstBowlOpponent(){return getKalahaFirst().getNextPlayer().getFirstBowl();}
+            Card tmp = cards[old_pos]; //pick random card
+            cards[old_pos] = cards[new_pos];
+            cards[new_pos] = tmp;
+        }
+        //after shuffle, reset currentCard to deal
+        currentCard = 0;
 
-	public boolean check(Bowl bowl){
-		try{
-			if(!bowl.hasStones()){/* if bowl has no stones */
-				check(bowl.goNextBowl()); //check next bowl
-			}
-			else{//bowl has stones
-				return true;
-			}
-		}
-		catch(NullPointerException e){//all bowls are checked, no more exist
-			return false;
-		}
-		return false; //will never reach
-	}
+    }
 
-	public int turn(int bowlNo, int hasTurn){
-		//first check if all bowls of player are empty
-		//something wrong here
-//		if(!check(first_bowl)){
-//			System.out.println("All bowls are empty!");
-//			return WINNER;
-//		}
-
-
-		Bowl picked_bowl = first_bowl.findBowl(bowlNo); //find correct bowl
-
-		//First check if move is allowed!
-		if(picked_bowl.hasStones()){
-			int out = picked_bowl.move(hasTurn);
-			return out; //take stones on hand, empty bowl and distribute stones
-		}
-		return NONVALID;
-	}
 }

@@ -1,7 +1,7 @@
 {
-  "name": "mancala-mvc",
+  "name": "klaverjas-mvc",
   "version": "1.0.0",
-  "description": "Front-end for the mancala mvc",
+  "description": "Front-end for the klaverjas mvc",
   "private": true,
   "scripts": {
     "start": "snowpack dev",

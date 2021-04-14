@@ -42,7 +42,7 @@ dependencies {
 
 application {
     // Define the main class for the application.
-    mainClassName = 'mancala.App'
+    mainClassName = 'klaverjas.App'
 }
 
 test {

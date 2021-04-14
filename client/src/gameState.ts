@@ -1,6 +1,6 @@
 
 export interface GameState {
-    players: [ Player, Player ]; // a player array contains exactly two Players
+    players: [ Player, Player, Player, Player ]; // a player array contains exactly four Players
     gameStatus: {
         endOfGame: boolean;
     };
@@ -8,12 +8,13 @@ export interface GameState {
 
 interface Player {
     name: string;
-    pits: Pit[];
-    type: "player1" | "player2"; // only "player1" and "player2" are valid options for this string
+    cards: Card[];
+    team: "team1" | "team2"; // player can be in team1 or in team 2
+    type: "player1" | "player2" | "player3" | "player4"; //player can be player1, player2, player3 or player4
     hasTurn: boolean;
 }
 
-interface Pit {
+interface Card {
+    name: string;
     index: number;
-    nrOfStones: number;
 }
