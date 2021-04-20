@@ -67,6 +67,7 @@ public class StartKlaverjasTest {
         verify(request).getSession(true);
     }
 
+
     @Test
     public void startingKlaverjassenSavesTheNewGameInASession() {
         startKlaverjas("Mario", "Luigi", "Bowser", "Peach");

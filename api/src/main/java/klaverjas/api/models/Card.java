@@ -4,17 +4,16 @@ public class Card {
 	private final int rank;
 	private final int suit;
 	private int points;
-	private Card testcard;
 	private String name;
 
-
-	public Card(int rank, int suit){
+	public Card(int index, int rank, int suit){
 		this.rank = rank;
 		this.suit = suit;
+		this.index = index;
 
-		String[] ranks = {"7", "8", "9", "Jack", "Queen", "King", "10", "Ace"};
-		String[] suits = {"Clubs", "Diamonds", "Hearts", "Spades"};
-		name = ranks[this.rank] + " of " + suits[this.suit];
+		String[] ranks = {"7", "8", "9", "J", "Q", "K", "10", "A"};
+		char[] suits = {'\u2663', '\u2666', '\u2764', '\u2660'};
+		name = ranks[this.rank] + " " + suits[this.suit];
 
 		//determine points card is worth
 		if(rank < 2){ points = 0; }
@@ -25,6 +24,18 @@ public class Card {
 		else if(rank == 7){ points = 11 ;}
 
 	}
+
+	//We need to do something with this
+	public Card(int index){
+		this.index = index;
+		rank = 1;
+		suit = 1;
+		name = "No card";
+
+	}
+
+	private int index;
+	public int getIndex() { return index; }
 
 	public int getPoints() {
 		return points;

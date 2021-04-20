@@ -4,7 +4,7 @@ public class CardInput {
 
 	Integer cardindex;
 
-	public Integer getCard() {
+	public Integer getIndex() {
 		return cardindex;
 	}
 

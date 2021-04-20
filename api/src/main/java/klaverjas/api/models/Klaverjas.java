@@ -13,11 +13,23 @@ public class Klaverjas {
         players[2] = new Player(klaverjas, namePlayer3, true, klaverjas.PLAYER_THREE);
         players[3] = new Player(klaverjas, namePlayer4, false, klaverjas.PLAYER_FOUR);
         gameStatus = new GameStatus(klaverjas, namePlayer1, namePlayer2, namePlayer3, namePlayer4);
+        team1score = klaverjas.getTeam1Score();
+        team2score = klaverjas.getTeam2Score();
+        correctmove = klaverjas.getCorrectMove();
     }
+
+    boolean correctmove;
+    public boolean getCorrectMove() { return correctmove; }
 
     Player[] players;
     public Player[] getPlayers() { return players; }
-    
+
+    int team1score;
+    public int getTeam1score() { return team1score; }
+
+    int team2score;
+    public int getTeam2score() { return team2score; }
+
     GameStatus gameStatus;
     public GameStatus getGameStatus() { return gameStatus; }
 }

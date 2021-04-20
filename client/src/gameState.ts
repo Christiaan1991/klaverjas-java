@@ -4,17 +4,24 @@ export interface GameState {
     gameStatus: {
         endOfGame: boolean;
     };
+    team1score: number;
+    team2score: number;
+    correctmove: boolean;
 }
 
 interface Player {
     name: string;
-    cards: Card[];
     team: "team1" | "team2"; // player can be in team1 or in team 2
     type: "player1" | "player2" | "player3" | "player4"; //player can be player1, player2, player3 or player4
     hasTurn: boolean;
+    hasSlagTurn: boolean;
+    hasRoundTurn: boolean;
+    score: number;
+    cards: Card[];
+    playedCard: Card;
 }
 
 interface Card {
-    name: string;
     index: number;
+    name: string;
 }

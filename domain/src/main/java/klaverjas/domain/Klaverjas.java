@@ -22,6 +22,10 @@ public interface Klaverjas {
 	 * 
 	 * @return True is the game has ended otherwise False.
 	 */
+	boolean isPlayersSlagTurn(int player);
+
+	boolean isPlayersRoundTurn(int player);
+
 	boolean isEndOfGame();
 
 	/**
@@ -32,5 +36,11 @@ public interface Klaverjas {
 	int getWinner();
 
 	Player[] getPlayers();
+
+	int getTeam1Score();
+
+	int getTeam2Score();
+
+	boolean getCorrectMove();
 
 }

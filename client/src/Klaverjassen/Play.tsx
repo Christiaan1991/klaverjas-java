@@ -9,11 +9,27 @@ type PlayProps = {
 
 export function Play({ gameState, setGameState }: PlayProps) {
 	
-	const [cardnum, setCard] = useState("");
+	const [cardnum, setCard] = useState(0);
 	const [errorMessage, setErrorMessage] = useState("");
 
-	async function pickIndex(e: React.FormEvent, cardnum) {
-        e.preventDefault();
+	async function pickCard(e: React.FormEvent, card, turn) {
+        e.preventDefault(); 
+        if(!turn) {//check if picked card is allows!
+            setErrorMessage("Move not allowed, play your own Card!");
+            return;
+        }
+
+        setCard(card.index);
+        setErrorMessage("");
+
+        console.log(cardnum);
+
+        for (var i = gameState.players.length - 1; i >= 0; i--) {
+            if(gameState.players[i].hasTurn){
+                console.log(gameState.players[i].name + " Played " + card.name);
+            }
+        }
+        
 
         try {
             const response = await fetch('klaverjas/api/move', {
@@ -49,32 +65,93 @@ export function Play({ gameState, setGameState }: PlayProps) {
     else if(gameState.players[3].hasTurn){
         status = gameState.players[3].name;
     }
-	
-    console.log(gameState)
+
+    if(gameState.correctmove == false){
+        setErrorMessage("Wrong suit, play allowed move!");
+        return;
+    }
+
+    console.log(gameState);
 
     return (
-        <div>
-            <p>{gameState.players[0].name} and {gameState.players[2].name} vs {gameState.players[1].name} and {gameState.players[3].name}</p>
-            <div className="status">Turn: {status}</div>
+        <body>
+            <div>
+                <table className="scoretable">
+                    <tr>
+                        <th>{gameState.players[0].name} and {gameState.players[2].name}</th>
+                        <th>{gameState.players[1].name} and {gameState.players[3].name}</th>
+                    </tr>
+                     <tr>
+                        <td>{gameState.players[0].score + gameState.players[2].score}</td>
+                        <td>{gameState.players[1].score + gameState.players[3].score}</td>
+                    </tr>
+                    <tr>
+                        <td>{gameState.team1score}</td>
+                        <td>{gameState.team2score}</td>
+                    </tr>
+                </table>
+                
+                <div className="status">Turn: {status}</div>
 
-            <p>{gameState.players[0].name}</p>
-            <p>{gameState.players[0].cards.reverse().map((card) => 
-                <button className="cards" onClick={(e) => pickIndex(e, card.index)} > {card.name} </button>)} </p>
+                <p className="errorMessage"><b>{errorMessage}</b></p>
 
-            <p>{gameState.players[1].name}</p>
-            <p>{gameState.players[1].cards.reverse().map((card) => 
-                <button className="cardsplayerleft" onClick={(e) => pickIndex(e, card.index)} > {card.name} </button>)} </p>
+                <div className="grid-container">
+                    <div className="p1">
+                        <div>{gameState.players[0].name}</div>
+                        <table className="player1">
+                            <tbody>
+                            <tr>{gameState.players[0].cards.reverse().map((card) => 
+                            <td><button className="cards" onClick={(e) => pickCard(e, card, gameState.players[0].hasTurn)} > {card.name} </button></td>)}
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div className="p2">
+                        <div>{gameState.players[1].name}</div>
+                         <table className="player2">
+                            <tbody>
+                            <td>{gameState.players[1].cards.reverse().map((card) => 
+                            <tr><button className="cards-side" onClick={(e) => pickCard(e, card, gameState.players[1].hasTurn)} > {card.name} </button></tr>)}
+                            </td>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div className="p3">
+                        <div>{gameState.players[2].name}</div>
+                         <table className="player3">
+                            <tbody>
+                            <tr>{gameState.players[2].cards.reverse().map((card) => 
+                            <td><button className="cards" onClick={(e) => pickCard(e, card, gameState.players[2].hasTurn)} > {card.name} </button></td>)}
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div className="p4">
+                        <div>{gameState.players[3].name}</div>
+                         <table className="player4">
+                            <tbody>
+                            <td>{gameState.players[3].cards.reverse().map((card) => 
+                            <tr><button className="cards-side" onClick={(e) => pickCard(e, card, gameState.players[3].hasTurn)} > {card.name} </button></tr>)}
+                            </td>
+                            </tbody>
+                        </table>
+                    </div>
 
-            <p>{gameState.players[2].name}</p>
-            <p>{gameState.players[2].cards.reverse().map((card) => 
-                <button className="cardplayeropposite" onClick={(e) => pickIndex(e, card.index)} > {card.name} </button>)} </p>
-
-            <p>{gameState.players[3].name}</p>
-            <p>{gameState.players[3].cards.reverse().map((card) => 
-                <button className="cardsplayerright" onClick={(e) => pickIndex(e, card.index)} > {card.name} </button>)} </p>
-
-
-            
-        </div>
+                    <div className="p5">
+                        <div>{gameState.players[0].playedCard == null ? <button className="cards" >{"no played card"}</button> : <button className="cards" >{gameState.players[0].playedCard.name}</button>}</div>
+                    </div>
+                    <div className="p6">
+                        <div>{gameState.players[1].playedCard == null ? <button className="cards-side" >{"no played card"}</button> : <button className="cards" >{gameState.players[1].playedCard.name}</button>}</div>
+                    </div>
+                    <div className="p7">
+                        <div>{gameState.players[2].playedCard == null ? <button className="cards" >{"no played card"}</button> : <button className="cards" >{gameState.players[2].playedCard.name}</button>}</div>
+                    </div>
+                    <div className="p8">
+                        <div>{gameState.players[3].playedCard == null ? <button className="cards-side" >{"no played card"}</button> : <button className="cards" >{gameState.players[3].playedCard.name}</button>}</div>
+                    </div>
+                </div>       
+            </div>
+        </body>
     )
 }
+

@@ -17,7 +17,7 @@ public class StartKlaverjas {
 	public Response initialize(
 			@Context HttpServletRequest request, 
 			PlayerInput players) {
-    	System.out.println(Response.status(200));
+
         var klaverjas = new KlaverjasImpl();
         String namePlayer1 = players.getNameplayer1();
 		String namePlayer2 = players.getNameplayer2();
