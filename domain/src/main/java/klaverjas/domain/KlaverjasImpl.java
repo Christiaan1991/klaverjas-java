@@ -14,9 +14,10 @@ public class KlaverjasImpl implements Klaverjas {
     private int hasSlagTurn; //to remember who started the slag
 
     private boolean correctMove;
-    private int picked_suit;
     private int team1_score;
     private int team2_score;
+    private int picked_suit;
+    private int picked_trump;
 
     public KlaverjasImpl(){
         //create team 1 and team 2
@@ -42,6 +43,12 @@ public class KlaverjasImpl implements Klaverjas {
         hasTurn = hasSlagTurn;
     }
 
+    public void setPickedSuit(int suit){ picked_suit = suit; }
+
+    public void setPickedTrump(int suit){ picked_trump = suit; }
+
+    public int getPickedTrump() { return picked_trump; }
+
     public int getWinner(){ return winner; }
 
     public Player[] getPlayers(){ return players; }
@@ -55,11 +62,17 @@ public class KlaverjasImpl implements Klaverjas {
     @Override
     public boolean getCorrectMove(){ return correctMove; }
 
-    public void move(int num) {
-        Card pickedCard = players[hasTurn].hand.get(num);
+    public void move(Integer rank, Integer suit) {
 
-        if(isMoveAllowed(pickedCard)){ //if move is allowed, we play the card, go to next player, and say correctmove!
-            players[hasTurn].playCard(num);
+        //first check if the pickedCard is actually in players hand!
+        if(!players[hasTurn].inHand(rank, suit)){ //if not in hand, say correctmove is false, and return back to API
+            System.out.println("Card is not in players hand!");
+            correctMove = false;
+            return;
+        }
+
+        if(isMoveAllowed(suit)){ //if move is allowed, we play the card, go to next player, and say correctmove!
+            players[hasTurn].playCard(rank, suit);
             nextTurn();
             correctMove = true;
 
@@ -121,21 +134,21 @@ public class KlaverjasImpl implements Klaverjas {
 
     public boolean checkHandSuit(int picked_suit){
 
-        for(int i = 0; i < players[hasTurn].hand.size(); i++){
-            if(players[hasTurn].hand.get(i).getSuit() == picked_suit){ //if this is true, player cannot perform move
+        for(Card card: players[hasTurn].getHand() ){
+            if(card.getSuit() == picked_suit){ //if this is true, player cannot perform move
                 return true;
             }
         }
         return false; //else, suit is not in his hand, so he can play any card
     }
 
-    public boolean isMoveAllowed(Card pickedCard){
+    public boolean isMoveAllowed(Integer suit){
         if(hasTurn == hasSlagTurn){ //player's slagturn determines the suit
-            int picked_suit = pickedCard.getSuit();
+            setPickedSuit(suit);
             return true; //move is allowed
         }
         else {//other player turn than the player who started the slag
-            if(pickedCard.getSuit() == picked_suit){ //a card with the suit corresponding to picked_suit, move is correct
+            if(suit == picked_suit){ //a card with the suit corresponding to picked_suit, move is correct
                 return true;
             }
             else if(!checkHandSuit(picked_suit)){ //suit is not in players hand, so player can play any card

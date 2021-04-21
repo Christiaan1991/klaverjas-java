@@ -38,9 +38,21 @@ public class Player {
 
     public void addToHand(Card card){ hand.add(card); }
 
-    public void playCard(int i) {
-        playedCard = hand.get(i);
-        hand.remove(i);
+    public boolean inHand(Integer rank, Integer suit){
+        for(Card card: hand){
+            if(card.getRank() == rank && card.getSuit() == suit){ //pickedCard is in hand!
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+
+    public void playCard(Integer rank, Integer suit) {
+        playedCard = new Card(rank, suit);
+        hand.removeIf(i -> i.getRank() == rank && i.getSuit() == suit);
+
     }
 
     public boolean hasPlayedCard(){

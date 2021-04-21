@@ -6,7 +6,8 @@ export interface GameState {
     };
     team1score: number;
     team2score: number;
-    correctmove: boolean;
+    correctMove: boolean;
+    //trump: number;
 }
 
 interface Player {
@@ -22,6 +23,7 @@ interface Player {
 }
 
 interface Card {
-    index: number;
+    rank: number;
+    suit: number;
     name: string;
 }

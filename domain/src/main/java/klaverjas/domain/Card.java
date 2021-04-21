@@ -31,10 +31,4 @@ public class Card {
         return suit;
     }
 
-    public String toString() {
-        String[] ranks = {"7", "8", "9", "Jack", "Queen", "King", "10", "Ace"};
-        String[] suits = {"Clubs", "Diamonds", "Hearts", "Spades"};
-        String s = ranks[this.rank] + " of " + suits[this.suit];
-        return s;
-    }
 }

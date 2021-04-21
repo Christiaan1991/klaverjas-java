@@ -9,6 +9,7 @@ import jakarta.ws.rs.core.*;
 import klaverjas.api.models.*;
 import klaverjas.domain.KlaverjasException;
 import klaverjas.domain.KlaverjasImpl;
+import klaverjas.domain.Card;
 
 @Path("/move")
 public class MoveKlaverjas {
@@ -17,18 +18,18 @@ public class MoveKlaverjas {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response initialize(
 			@Context HttpServletRequest request, 
-			CardInput indexinput) {
+			CardInput cardinput) {
 		HttpSession session = request.getSession(true);
 		KlaverjasImpl klaverjas = (KlaverjasImpl) session.getAttribute("klaverjas");
 		String namePlayer1 = (String) session.getAttribute("player1");
 		String namePlayer2 = (String) session.getAttribute("player2");
 		String namePlayer3 = (String) session.getAttribute("player3");
 		String namePlayer4 = (String) session.getAttribute("player4");
+		Integer rank = cardinput.getRank();
+		Integer suit = cardinput.getSuit();
 
-		Integer cardnum = indexinput.getIndex();
-
-		//something happens with the CardInput Integer (card number)
-		klaverjas.move(cardnum);
+		//apply move to the played card
+		klaverjas.move(rank, suit);
 
 		//setattribute, and create klaverjas from API to send to server
 		session.setAttribute("klaverjas", klaverjas);

@@ -17,13 +17,13 @@ public class Player {
 		score = klaverjas.getPlayers()[player].getScore();
 
 		if(klaverjas.getPlayers()[player].hasPlayedCard()) {
-			playedCard = new Card(0, klaverjas.getPlayers()[player].getPlayedCard().getRank(), klaverjas.getPlayers()[player].getPlayedCard().getSuit());
+			playedCard = new Card(klaverjas.getPlayers()[player].getPlayedCard().getRank(), klaverjas.getPlayers()[player].getPlayedCard().getSuit());
 		}
 
 		int noOfCards = klaverjas.getPlayers()[player].getHand().size();
 		cards = new Card[noOfCards];
-		for(int i = 0; i < noOfCards; ++i) {
-			cards[i] = new Card(i, klaverjas.getPlayers()[player].getHand().get(i).getRank(), klaverjas.getPlayers()[player].getHand().get(i).getSuit());
+		for(int i = 0; i < noOfCards; i++) {
+			cards[i] = new Card(klaverjas.getPlayers()[player].getHand().get(i).getRank(), klaverjas.getPlayers()[player].getHand().get(i).getSuit());
 		}
     }
     

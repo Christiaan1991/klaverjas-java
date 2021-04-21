@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { StartGame } from "./StartGame";
 import { Play } from "./Play";
+// import { PickTrump } from "./PickTrump";
 import type { GameState } from "../gameState";
 import "./Klaverjassen.css";
 
@@ -19,6 +20,10 @@ export function Klaverjassen() {
     if (!gameState) {
         return <StartGame setGameState={setGameState} />
     }
+
+    // if(gameState.players[0].hasRoundTurn == gameState.players[0].hasRoundTurn && gameState.trump == null) {
+    // 	return <PickTrump gameState={gameState} setGameState={setGameState} />
+    // }
 
     return <Play gameState={gameState} setGameState={setGameState} />
 }
