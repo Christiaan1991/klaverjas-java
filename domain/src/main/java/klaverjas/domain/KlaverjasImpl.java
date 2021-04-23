@@ -17,7 +17,9 @@ public class KlaverjasImpl implements Klaverjas {
     private int team1_score;
     private int team2_score;
     private int picked_suit;
-    private int picked_trump;
+    private int picked_trump = 100; //value which is not realistic, until set!
+    private int highestvalue = 0;
+    private int hasslag;
 
     public KlaverjasImpl(){
         //create team 1 and team 2
@@ -45,8 +47,6 @@ public class KlaverjasImpl implements Klaverjas {
 
     public void setPickedSuit(int suit){ picked_suit = suit; }
 
-    public void setPickedTrump(int suit){ picked_trump = suit; }
-
     public int getPickedTrump() { return picked_trump; }
 
     public int getWinner(){ return winner; }
@@ -62,7 +62,30 @@ public class KlaverjasImpl implements Klaverjas {
     @Override
     public boolean getCorrectMove(){ return correctMove; }
 
-    public void move(Integer rank, Integer suit) {
+    public boolean isPickedTrump(int trump){
+        if(trump == picked_trump){ return true; }
+        else{ return false;}
+    }
+
+    public boolean isPickedSuit(int suit){
+        if(suit == picked_suit){ return true; }
+        else{ return false;}
+    }
+
+    public void pickTrump(int trump){
+        picked_trump = trump;
+
+        //change all trump cards to trump
+        for(Player player: players){
+            for(Card card: player.getHand()){
+                if(card.getSuit() == picked_trump){
+                    card.setTrump(); //set all these cards as trump cards in all players hand!
+                }
+            }
+        }
+    }
+
+    public void move(Integer rank, Integer suit) throws Exception {
 
         //first check if the pickedCard is actually in players hand!
         if(!players[hasTurn].inHand(rank, suit)){ //if not in hand, say correctmove is false, and return back to API
@@ -71,8 +94,11 @@ public class KlaverjasImpl implements Klaverjas {
             return;
         }
 
-        if(isMoveAllowed(suit)){ //if move is allowed, we play the card, go to next player, and say correctmove!
-            players[hasTurn].playCard(rank, suit);
+        //try and play the card!
+        players[hasTurn].playCard(rank, suit, picked_trump);
+
+        if(isMoveAllowed(players[hasTurn].getPlayedCard())){ //if move is allowed, we determine the highest value of all the played cards, go to next player, and say correctmove!
+            determineHighestValue();
             nextTurn();
             correctMove = true;
 
@@ -80,21 +106,33 @@ public class KlaverjasImpl implements Klaverjas {
                 int winningplayerid = compareCards();       //determine the winner
                 calculatePoints(players[winningplayerid]);  //add up points to the winner
                 resetPlayerCards();                         //remove playedCards
+                highestvalue = 0;                           //reset highest value card
                 hasSlagTurn = winningplayerid;              //winner has starts with new slag
                 hasTurn = hasSlagTurn;                      //person who starts slag starts the turn
             }
 
             if(isEndOfRound()){ //if end of round
                 setTeamScore(); //we add points from players to team, and set player score back to 0
+                picked_trump = 100; //reset picked_trump
                 nextRoundTurn();
                 getDeck().shuffleDeck(); //shuffle deck
                 deal(); //deal cards
             }
         }
-        else{
+        else { //move not allowed, so put playedcard back in the hand
+            players[hasTurn].getHand().add(players[hasTurn].getPlayedCard());
+            players[hasTurn].resetPlayerCard();
             correctMove = false; //no correct move, needs to be feedbacked to the front-end
         }
 
+    }
+
+    public void determineHighestValue(){
+        Integer newhighestvalue = players[hasTurn].getPlayedCard().getValue(); //to keep track of highest value card
+        if(newhighestvalue > highestvalue){
+            highestvalue = newhighestvalue;
+            hasslag = hasTurn; //slag is for this player, determines if you have to trump yes or no
+        }
     }
 
     public boolean isEndOfSlag(){
@@ -115,6 +153,15 @@ public class KlaverjasImpl implements Klaverjas {
         }
     }
 
+    public boolean isHigherValueInHand(){
+        for(Card card: players[hasTurn].getHand()){
+            if(card.getValue() > highestvalue){
+                return true;
+            }
+        }
+        return false;
+    }
+
     public void resetPlayerCards(){
         players[0].resetPlayerCard();
         players[1].resetPlayerCard();
@@ -132,43 +179,74 @@ public class KlaverjasImpl implements Klaverjas {
         players[3].resetScore();
     }
 
-    public boolean checkHandSuit(int picked_suit){
+    public boolean isSuitInHand(int picked_suit){
 
         for(Card card: players[hasTurn].getHand() ){
-            if(card.getSuit() == picked_suit){ //if this is true, player cannot perform move
+            if(card.getSuit() == picked_suit){
                 return true;
             }
         }
-        return false; //else, suit is not in his hand, so he can play any card
+        return false;
     }
 
-    public boolean isMoveAllowed(Integer suit){
-        if(hasTurn == hasSlagTurn){ //player's slagturn determines the suit
-            setPickedSuit(suit);
-            return true; //move is allowed
-        }
-        else {//other player turn than the player who started the slag
-            if(suit == picked_suit){ //a card with the suit corresponding to picked_suit, move is correct
-                return true;
-            }
-            else if(!checkHandSuit(picked_suit)){ //suit is not in players hand, so player can play any card
-                return true;
-            }
-            else{
-                return false; //move not allowed!
-            }
-        }
+    public boolean isMoveAllowed(Card card) throws Exception {
+        if (hasTurn == hasSlagTurn) { //player's slagturn determines the suit
+            setPickedSuit(card.getSuit());
+            return true; //move is always allowed
+        } else {//other player turn than the player who started the slag
+            if (isPickedSuit(card.getSuit())) { //a card with the suit corresponding to picked_suit
+                if (isPickedTrump(card.getSuit())) { //if the suit is the trump suit
+                    if (card.getValue() < highestvalue && isHigherValueInHand()) { //if played card value is lower than the highest value on table, and high is avaiable in hand
+                        return false; //move not allowed
+                    } else {
+                        return true;
+                    }
+                } else {
+                    return true;
+                }
+            } else if (isSuitInHand(picked_suit)) { //if you have picked_suit in hand, you always have to follow!
+                return false;
+            } else if (!isSuitInHand(picked_suit)) { //suit is not in players hand
 
+                if (Math.abs(hasTurn - hasslag) == 2) { //if slag is on his mate, player can play any card
+                    return true;
+                } else if (isSuitInHand(picked_trump)) { //else, if player has trump cards in hand
+                    if (card.getSuit() == picked_trump) { //if suit of picked card is trump
+                        //System.out.println(highestvalue);
+                        System.out.println(card.getValue());
+                        if (card.getValue() < highestvalue && isHigherValueInHand()) { //if card is played lower in value, and higher value is still in hand
+                            return false; //now allowed
+                        } else if (card.getValue() > highestvalue) {
+                            return true; //higher trump than played card, so allowed!
+                        } else if (!isHigherValueInHand()) {
+                            return false; //we are not allowed to play trump cards which are lower than the played trump, unless only trump cards are present in hand
+                        }
+                    }
+                    else if(card.getSuit() != picked_trump && !isHigherValueInHand()) { //if played card is not trump, but we don't have any higher card, we can play it!
+                        return true;
+                    }
+                    else if (card.getSuit() != picked_trump && isHigherValueInHand()) { //if we have higher trump in hand, we cannot play no trump
+                        return false;
+                    }
+
+                }
+                else if (!isSuitInHand(picked_trump)) { //if player has no trump, he can play any card!
+                    return true;
+                }
+
+            }
+        }
+        throw new Exception("IsMoveAllowed method should not come here");
     }
 
     public int compareCards(){
-        int maxRank = 0;
+        int maxValue = 0;
         int playerwon = 0;
         for(int i = 0; i < 4; i++){
-            int playedcardrank = players[i].getPlayedCard().getRank();
+            int playedcardvalue = players[i].getPlayedCard().getValue();
             int playedcardsuit = players[i].getPlayedCard().getSuit();
-            if(playedcardrank > maxRank && playedcardsuit == picked_suit){
-                maxRank = playedcardrank;
+            if(playedcardvalue > maxValue && (playedcardsuit == picked_suit || playedcardsuit == picked_trump)){
+                maxValue = playedcardvalue;
                 playerwon = i;
             }
         }

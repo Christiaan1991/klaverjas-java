@@ -11,25 +11,24 @@ import klaverjas.domain.KlaverjasException;
 import klaverjas.domain.KlaverjasImpl;
 import klaverjas.domain.Card;
 
-@Path("/move")
-public class MoveKlaverjas {
+@Path("/pick")
+public class PickTrumpKlaverjas {
     @POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response initialize(
 			@Context HttpServletRequest request, 
-			CardInput cardinput) throws Exception {
+			TrumpInput trumpinput) throws Exception {
 		HttpSession session = request.getSession(true);
 		KlaverjasImpl klaverjas = (KlaverjasImpl) session.getAttribute("klaverjas");
 		String namePlayer1 = (String) session.getAttribute("player1");
 		String namePlayer2 = (String) session.getAttribute("player2");
 		String namePlayer3 = (String) session.getAttribute("player3");
 		String namePlayer4 = (String) session.getAttribute("player4");
-		Integer rank = cardinput.getRank();
-		Integer suit = cardinput.getSuit();
+		Integer trump = trumpinput.getSuit();
 
 		//apply move to the played card
-		klaverjas.move(rank, suit);
+		klaverjas.pickTrump(trump);
 
 		//setattribute, and create klaverjas from API to send to server
 		session.setAttribute("klaverjas", klaverjas);

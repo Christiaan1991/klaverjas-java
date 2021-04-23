@@ -7,7 +7,7 @@ export interface GameState {
     team1score: number;
     team2score: number;
     correctMove: boolean;
-    //trump: number;
+    pickedTrump: number;
 }
 
 interface Player {
@@ -26,4 +26,5 @@ interface Card {
     rank: number;
     suit: number;
     name: string;
+    trump: boolean;
 }

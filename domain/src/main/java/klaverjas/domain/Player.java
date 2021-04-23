@@ -1,11 +1,9 @@
 package klaverjas.domain;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Player {
-    private String name;
     private int team;
     List<Card> hand = new ArrayList<Card>();
     private int score;
@@ -47,12 +45,12 @@ public class Player {
         return false;
     }
 
-
-
-    public void playCard(Integer rank, Integer suit) {
-        playedCard = new Card(rank, suit);
+    public void playCard(Integer rank, Integer suit, Integer pickedtrump) {
+        playedCard = new Card(rank, suit); //not yet a trump card
+        if(playedCard.getSuit() == pickedtrump){
+            playedCard.setTrump(); //we set the played card as a trump card
+        }
         hand.removeIf(i -> i.getRank() == rank && i.getSuit() == suit);
-
     }
 
     public boolean hasPlayedCard(){

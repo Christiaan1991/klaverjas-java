@@ -4,14 +4,17 @@ public class Card {
 	private final int rank;
 	private final int suit;
 	private String name;
+	private int picked_suit;
+	private boolean trump;
 
-	public Card(int rank, int suit){
+	public Card(int rank, int suit, int picked_suit){
 		this.rank = rank;
 		this.suit = suit;
 
-		String[] ranks = {"7", "8", "9", "J", "Q", "K", "10", "A"};
-		char[] suits = {'\u2663', '\u2666', '\u2764', '\u2660'};
+		String[] ranks = {"7", "8", "9", "10", "J", "Q", "K", "A"};
+		char[] suits = {'\u2662', '\u2663', '\u2664', '\u2665'}; //diamonds, clubs, spades, hearts
 		name = ranks[this.rank] + " " + suits[this.suit];
+		trump = isTrump(suit);
 
 	}
 
@@ -23,14 +26,14 @@ public class Card {
 		return suit;
 	}
 
-	public boolean isCard(){
-		if(this instanceof Card){
+	public String getName() { return name; }
+
+	public boolean isTrump(int suit){
+		if(picked_suit == suit){
 			return true;
 		}
 		else{
 			return false;
 		}
 	}
-
-	public String getName() { return name; }
 }

@@ -50,11 +50,6 @@ public class StartKlaverjasTest {
         assertEquals(8, players[2].getCards().length);
         assertEquals(8, players[3].getCards().length);
 
-        assertTrue(players[0].getCards()[0].isCard());
-        assertTrue(players[1].getCards()[0].isCard());
-        assertTrue(players[2].getCards()[0].isCard());
-        assertTrue(players[3].getCards()[0].isCard());
-
         assertTrue(players[0].getHasTurn());
         assertFalse(players[1].getHasTurn());
         assertFalse(players[2].getHasTurn());

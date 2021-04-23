@@ -16,6 +16,7 @@ public class Klaverjas {
         team1score = klaverjas.getTeam1Score();
         team2score = klaverjas.getTeam2Score();
         correctmove = klaverjas.getCorrectMove();
+        trump = klaverjas.getPickedTrump();
     }
 
     boolean correctmove;
@@ -32,4 +33,7 @@ public class Klaverjas {
 
     GameStatus gameStatus;
     public GameStatus getGameStatus() { return gameStatus; }
+
+    int trump;
+    public int getPickedTrump() { return trump; }
 }

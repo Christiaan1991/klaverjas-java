@@ -45,6 +45,14 @@
   box-shadow: .2em .2em .5em #333;
 }
 
+.block {
+    width: 2.2em;
+    height: 2.2em;
+    vertical-align: middle;
+    font-size: 2.0em;
+    background-color: #fff;
+} 
+
 .p1 {grid-area: p1;}
 .p2 {grid-area: p2;}
 .p3 {grid-area: p3;}
@@ -53,6 +61,7 @@
 .p6 {grid-area: p6;}
 .p7 {grid-area: p7;}
 .p8 {grid-area: p8;}
+.p9 {grid-area: p9;}
 
 .grid-container {
   display: grid;
@@ -62,7 +71,7 @@
     "p2 p2 . . . . . p4 p4"
     "p2 p2 . . p7 . . p4 p4"
     "p2 p2 . . . . . p4 p4"
-    "p2 p2 . p6 . p8 . p4 p4"
+    "p2 p2 . p6 p9 p8 . p4 p4"
     "p2 p2 . . . . . p4 p4"
     "p2 p2 . . p5 . . p4 p4"
     "p2 p2 . . . . . p4 p4"

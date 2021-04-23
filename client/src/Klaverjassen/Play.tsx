@@ -35,7 +35,6 @@ export function Play({ gameState, setGameState }: PlayProps) {
             if (response.ok) {
                 const gameState = await response.json();
                 setGameState(gameState);
-                console.log(gameState);
 
             } else {
                 console.error(response.statusText);
@@ -45,6 +44,8 @@ export function Play({ gameState, setGameState }: PlayProps) {
         }
 
     }
+
+    console.log(gameState)
 
     if(gameState.players[0].hasTurn){
     	status = gameState.players[0].name;
@@ -59,8 +60,22 @@ export function Play({ gameState, setGameState }: PlayProps) {
         status = gameState.players[3].name;
     }
 
-    if(gameState.correctMove == false){
-        console.log("Move not allowed")
+    var trumpstring;
+
+    if(gameState.pickedTrump == 100){
+        trumpstring = "no trump picked!";
+    }
+    else if(gameState.pickedTrump == 0){
+        trumpstring = "\u2662";
+    }
+    else if(gameState.pickedTrump == 1){
+        trumpstring = "\u2663";
+    }
+    else if(gameState.pickedTrump == 2){
+        trumpstring = "\u2664";
+    }
+    else if(gameState.pickedTrump == 3){
+        trumpstring = "\u2665";
     }
 
     
@@ -141,6 +156,10 @@ export function Play({ gameState, setGameState }: PlayProps) {
                     <div className="p8">
                         <div>{gameState.players[3].playedCard == null ? <button className="cards-side" >{"no played card"}</button> : <button className="cards" >{gameState.players[3].playedCard.name}</button>}</div>
                     </div>
+                    <div className="p9">
+                        <button className="block" >{trumpstring}</button>
+                    </div>
+
                 </div>       
             </div>
         </body>

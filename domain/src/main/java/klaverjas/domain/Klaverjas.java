@@ -43,4 +43,6 @@ public interface Klaverjas {
 
 	boolean getCorrectMove();
 
+	int getPickedTrump();
+
 }

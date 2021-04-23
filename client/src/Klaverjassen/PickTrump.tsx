@@ -1,35 +1,32 @@
 import React, {useState} from "react";
 import type { GameState } from "../gameState";
-import "./Play.css";
+import "./PickTrump.css";
 
 type PlayProps = {
     gameState: GameState;
     setGameState(newGameState: GameState): void;
 }
 
-export function Play({ gameState, setGameState }: PlayProps) {
-	
-	const [Cardrank, setCardRank] = useState();
-    const [Cardsuit, setCardSuit] = useState();
-	const [errorMessage, setErrorMessage] = useState("");
+export function PickTrump({ gameState, setGameState }: PlayProps) {
 
-	async function pickCard(e: React.FormEvent, card: any, turn: any) {
+    const [errorMessage, setErrorMessage] = useState("");
+	
+	async function pickTrump(e: React.FormEvent, picked_trump) {
         e.preventDefault(); 
-        if(!turn) {//check if picked card is allows!
-            setErrorMessage("Move not allowed, play your own Card!");
+
+        if(picked_trump == null) {//check if picked card is allows!
+            setErrorMessage("Pick a trump!");
             return;
         }
-        console.log(card);
-        setErrorMessage("");
 
         try {
-            const response = await fetch('klaverjas/api/move', {
+            const response = await fetch('klaverjas/api/pick', {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({rank: card.rank, suit: card.suit})
+                body: JSON.stringify({suit: picked_trump})
             });
 
             if (response.ok) {
@@ -46,6 +43,8 @@ export function Play({ gameState, setGameState }: PlayProps) {
 
     }
 
+    console.log(gameState)
+
     if(gameState.players[0].hasTurn){
     	status = gameState.players[0].name;
     }
@@ -58,12 +57,6 @@ export function Play({ gameState, setGameState }: PlayProps) {
     else if(gameState.players[3].hasTurn){
         status = gameState.players[3].name;
     }
-
-    if(gameState.correctMove == false){
-        console.log("Move not allowed")
-    }
-
-    
 
     return (
         <body>
@@ -83,7 +76,7 @@ export function Play({ gameState, setGameState }: PlayProps) {
                     </tr>
                 </table>
                 
-                <div className="status">Turn: {status}</div>
+                <div className="status">{status}, please select a Trump!</div>
 
                 <p className="errorMessage"><b>{errorMessage}</b></p>
 
@@ -93,7 +86,7 @@ export function Play({ gameState, setGameState }: PlayProps) {
                         <table className="player1">
                             <tbody>
                             <tr>{gameState.players[0].cards.reverse().map((card) => 
-                            <td><button className="cards" onClick={(e) => pickCard(e, card, gameState.players[0].hasTurn)} > {card.name} </button></td>)}
+                            <td><button className="cards"> {card.name} </button></td>)}
                             </tr>
                             </tbody>
                         </table>
@@ -103,7 +96,7 @@ export function Play({ gameState, setGameState }: PlayProps) {
                          <table className="player2">
                             <tbody>
                             <td>{gameState.players[1].cards.reverse().map((card) => 
-                            <tr><button className="cards-side" onClick={(e) => pickCard(e, card, gameState.players[1].hasTurn)} > {card.name} </button></tr>)}
+                            <tr><button className="cards-side"> {card.name} </button></tr>)}
                             </td>
                             </tbody>
                         </table>
@@ -113,7 +106,7 @@ export function Play({ gameState, setGameState }: PlayProps) {
                          <table className="player3">
                             <tbody>
                             <tr>{gameState.players[2].cards.reverse().map((card) => 
-                            <td><button className="cards" onClick={(e) => pickCard(e, card, gameState.players[2].hasTurn)} > {card.name} </button></td>)}
+                            <td><button className="cards"> {card.name} </button></td>)}
                             </tr>
                             </tbody>
                         </table>
@@ -123,7 +116,7 @@ export function Play({ gameState, setGameState }: PlayProps) {
                          <table className="player4">
                             <tbody>
                             <td>{gameState.players[3].cards.reverse().map((card) => 
-                            <tr><button className="cards-side" onClick={(e) => pickCard(e, card, gameState.players[3].hasTurn)} > {card.name} </button></tr>)}
+                            <tr><button className="cards-side"> {card.name} </button></tr>)}
                             </td>
                             </tbody>
                         </table>
@@ -141,7 +134,14 @@ export function Play({ gameState, setGameState }: PlayProps) {
                     <div className="p8">
                         <div>{gameState.players[3].playedCard == null ? <button className="cards-side" >{"no played card"}</button> : <button className="cards" >{gameState.players[3].playedCard.name}</button>}</div>
                     </div>
-                </div>       
+                </div>   
+
+                <div className="picktrumpbuttons">
+                    <button className = "diamonds" onClick={(e) => pickTrump(e, 0)}>{"diamonds \u2666"}</button>
+                    <button className = "clubs" onClick={(e) => pickTrump(e, 1)}>{"clubs \u2663"}</button>
+                    <button className = "spades" onClick={(e) => pickTrump(e, 2)}>{"spades \u2660"}</button>
+                    <button className = "hearts" onClick={(e) => pickTrump(e, 3)}>{"hearts \u2665"}</button>
+                </div>    
             </div>
         </body>
     )

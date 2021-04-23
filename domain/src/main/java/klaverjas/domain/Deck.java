@@ -14,7 +14,8 @@ public class Deck {
         int i = 0;
         for(int rank = 0; rank < 8; rank++){
             for(int suit = 0; suit < 4; suit++){
-                cards[i++] = new Card(rank, suit);
+                Integer value = rank;
+                cards[i++] = new Card(rank, suit); //value of cards is same as rank as default
             }
         }
     }
