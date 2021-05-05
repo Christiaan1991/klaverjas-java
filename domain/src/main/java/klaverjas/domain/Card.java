@@ -8,19 +8,18 @@ public class Card {
     private boolean istrump = false;
 
     public Card(Integer rank, Integer suit){
-        this.rank = rank; //7, 8, 9, J, Q, K, 10, A
+        this.rank = rank; //7, 8, 9, 10, J, Q, K, A
         this.suit = suit; //Clubs, Spades, Hearts or Diamonds
 
-        if(!istrump){
-            value = rank;
-        }
+        if(rank == 0){ value = 0; points = 0;} //7
+        else if(rank == 1){ value = 1; points = 0;} //8
+        else if(rank == 2){ value = 2; points = 0;} //9
+        else if(rank == 3){ value = 6; points = 10;} //10
+        else if(rank == 4){ value = 3; points = 2;} //J
+        else if(rank == 5){ value = 4; points = 3;} //Q
+        else if(rank == 6){ value = 5; points = 4;} //K
+        else if(rank == 7){ value = 7; points = 11;} //A
 
-        if(value <= 2){ points = 0;}
-        else if(value == 3){ points = 2;}
-        else if(value == 4){ points = 3;}
-        else if(value == 5){ points = 4;}
-        else if(value == 6){ points = 10;}
-        else if(value == 7){ points = 11;}
     }
 
     public boolean isTrump(){ return istrump; }
@@ -32,10 +31,10 @@ public class Card {
         if(rank == 0) { value = 8; } //7
         else if(rank == 1){ value = 9; } //8
         else if(rank == 2){ value = 14; points = 14; } //9
-        else if(rank == 3){ value = 15; points = 20; } //J
-        else if(rank == 4){ value = 10; } //Q
-        else if(rank == 5){ value = 11; } //K
-        else if(rank == 6){ value = 12; } //10
+        else if(rank == 3){ value = 12; } //10
+        else if(rank == 4){ value = 15; points = 20; } //J
+        else if(rank == 5){ value = 10; } //Q
+        else if(rank == 6){ value = 11; } //K
         else if(rank == 7){ value = 13; } //A
     }
 

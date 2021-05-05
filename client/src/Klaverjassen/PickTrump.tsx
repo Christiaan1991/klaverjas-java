@@ -1,11 +1,14 @@
 import React, {useState} from "react";
 import type { GameState } from "../gameState";
+import socket from "../SocketProvider";
 import "./PickTrump.css";
 
 type PlayProps = {
     gameState: GameState;
     setGameState(newGameState: GameState): void;
 }
+
+
 
 export function PickTrump({ gameState, setGameState }: PlayProps) {
 
@@ -19,31 +22,26 @@ export function PickTrump({ gameState, setGameState }: PlayProps) {
             return;
         }
 
+        console.log(picked_trump);
         try {
-            const response = await fetch('klaverjas/api/pick', {
-                method: 'POST',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({suit: picked_trump})
-            });
-
-            if (response.ok) {
-                const gameState = await response.json();
-                setGameState(gameState);
-                console.log(gameState);
-
-            } else {
-                console.error(response.statusText);
+            const payLoad = {
+                "method": "pick",
+                "trump": picked_trump,
             }
+
+            socket.send(JSON.stringify(payLoad));
+            socket.onmessage = message =>{
+                const response = JSON.parse(message.data);
+
+                console.log(response.name + " has picked " + response.gamestate.trump);
+                const gameState = response.gamestate;
+                setGameState(gameState);
+            };
         } catch (error) {
             console.error(error.toString());
         }
 
     }
-
-    console.log(gameState)
 
     if(gameState.players[0].hasTurn){
     	status = gameState.players[0].name;
@@ -121,27 +119,16 @@ export function PickTrump({ gameState, setGameState }: PlayProps) {
                             </tbody>
                         </table>
                     </div>
+                <div className="p9">
+                    <button className = "block" onClick={(e) => pickTrump(e, 0)}>{"\u2666"}</button>
+                    <button className = "block" onClick={(e) => pickTrump(e, 1)}>{"\u2663"}</button>
+                    <button className = "block" onClick={(e) => pickTrump(e, 2)}>{"\u2660"}</button>
+                    <button className = "block" onClick={(e) => pickTrump(e, 3)}>{"\u2665"}</button>
+                </div>  
 
-                    <div className="p5">
-                        <div>{gameState.players[0].playedCard == null ? <button className="cards" >{"no played card"}</button> : <button className="cards" >{gameState.players[0].playedCard.name}</button>}</div>
-                    </div>
-                    <div className="p6">
-                        <div>{gameState.players[1].playedCard == null ? <button className="cards-side" >{"no played card"}</button> : <button className="cards" >{gameState.players[1].playedCard.name}</button>}</div>
-                    </div>
-                    <div className="p7">
-                        <div>{gameState.players[2].playedCard == null ? <button className="cards" >{"no played card"}</button> : <button className="cards" >{gameState.players[2].playedCard.name}</button>}</div>
-                    </div>
-                    <div className="p8">
-                        <div>{gameState.players[3].playedCard == null ? <button className="cards-side" >{"no played card"}</button> : <button className="cards" >{gameState.players[3].playedCard.name}</button>}</div>
-                    </div>
                 </div>   
 
-                <div className="picktrumpbuttons">
-                    <button className = "diamonds" onClick={(e) => pickTrump(e, 0)}>{"diamonds \u2666"}</button>
-                    <button className = "clubs" onClick={(e) => pickTrump(e, 1)}>{"clubs \u2663"}</button>
-                    <button className = "spades" onClick={(e) => pickTrump(e, 2)}>{"spades \u2660"}</button>
-                    <button className = "hearts" onClick={(e) => pickTrump(e, 3)}>{"hearts \u2665"}</button>
-                </div>    
+  
             </div>
         </body>
     )

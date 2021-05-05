@@ -1,5 +1,6 @@
 import React, {useState} from "react";
 import type { GameState } from "../gameState";
+import socket from "../SocketProvider"
 import "./Play.css";
 
 type PlayProps = {
@@ -12,6 +13,7 @@ export function Play({ gameState, setGameState }: PlayProps) {
 	const [Cardrank, setCardRank] = useState();
     const [Cardsuit, setCardSuit] = useState();
 	const [errorMessage, setErrorMessage] = useState("");
+    var trumpstring;
 
 	async function pickCard(e: React.FormEvent, card: any, turn: any) {
         e.preventDefault(); 
@@ -19,33 +21,28 @@ export function Play({ gameState, setGameState }: PlayProps) {
             setErrorMessage("Move not allowed, play your own Card!");
             return;
         }
-        console.log(card);
+
         setErrorMessage("");
-
         try {
-            const response = await fetch('klaverjas/api/move', {
-                method: 'POST',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({rank: card.rank, suit: card.suit})
-            });
-
-            if (response.ok) {
-                const gameState = await response.json();
-                setGameState(gameState);
-
-            } else {
-                console.error(response.statusText);
+            const payLoad = {
+                "method": "play",
+                "rank": card.rank,
+                "suit": card.suit,
             }
+
+            socket.send(JSON.stringify(payLoad));
+            socket.onmessage = message =>{
+                const response = JSON.parse(message.data);
+
+                
+                const gameState = response.gamestate;
+                setGameState(gameState);
+            };
         } catch (error) {
             console.error(error.toString());
         }
 
     }
-
-    console.log(gameState)
 
     if(gameState.players[0].hasTurn){
     	status = gameState.players[0].name;
@@ -60,25 +57,21 @@ export function Play({ gameState, setGameState }: PlayProps) {
         status = gameState.players[3].name;
     }
 
-    var trumpstring;
-
-    if(gameState.pickedTrump == 100){
+    if(gameState.trump == 100){
         trumpstring = "no trump picked!";
     }
-    else if(gameState.pickedTrump == 0){
+    else if(gameState.trump == 0){
         trumpstring = "\u2662";
     }
-    else if(gameState.pickedTrump == 1){
+    else if(gameState.trump == 1){
         trumpstring = "\u2663";
     }
-    else if(gameState.pickedTrump == 2){
+    else if(gameState.trump == 2){
         trumpstring = "\u2664";
     }
-    else if(gameState.pickedTrump == 3){
+    else if(gameState.trump == 3){
         trumpstring = "\u2665";
     }
-
-    
 
     return (
         <body>

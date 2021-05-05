@@ -1,15 +1,11 @@
 package klaverjas;
 
-import org.eclipse.jetty.server.Handler;
+import klaverjas.ws.EventSocket;
 import org.eclipse.jetty.server.Server;
-import org.eclipse.jetty.server.handler.*;
-import org.eclipse.jetty.webapp.*;
-import org.eclipse.jetty.servlet.ServletHandler;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
+import org.eclipse.jetty.websocket.server.config.JettyWebSocketServletContainerInitializer;
 import org.glassfish.jersey.servlet.ServletContainer;
-
-import klaverjas.api.*;
 
 public class App {
     public static void main(String[] args) throws Exception {
@@ -29,7 +25,7 @@ public class App {
     }
 
     private static ServletContextHandler createStatefulContext(Server server) {
-        ServletContextHandler context = 
+        ServletContextHandler context =
                 new ServletContextHandler(ServletContextHandler.SESSIONS);
         context.setContextPath("/");
         server.setHandler(context);
@@ -43,7 +39,18 @@ public class App {
         // http://localost:8080/klaverjas/api/start
         ServletHolder serverHolder = context.addServlet(ServletContainer.class, "/klaverjas/api/*");
         serverHolder.setInitOrder(1);
-        serverHolder.setInitParameter("jersey.config.server.provider.packages", 
+        serverHolder.setInitParameter("jersey.config.server.provider.packages",
                 "klaverjas.api");
+
+        // Configure specific websocket behavior
+        JettyWebSocketServletContainerInitializer.configure(context, (servletContext, wsContainer) ->
+        {
+            // Configure default max size
+            wsContainer.setMaxTextMessageSize(65535);
+
+            // Add websockets
+            wsContainer.addMapping("/events/*", EventSocket.class);
+        });
+
     }
 }

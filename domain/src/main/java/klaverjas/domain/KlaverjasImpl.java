@@ -1,8 +1,5 @@
 package klaverjas.domain;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class KlaverjasImpl implements Klaverjas {
     private int winner = NO_TEAM;
 
@@ -171,6 +168,12 @@ public class KlaverjasImpl implements Klaverjas {
     }
 
     public void setTeamScore() {
+//        if(isNat(hasRoundTurn)){
+//
+//        }
+//        if(hasPit()){
+//
+//        }
         team1_score = players[0].getScore() + players[2].getScore();
         team2_score = players[1].getScore() + players[3].getScore();
         players[0].resetScore();
@@ -212,8 +215,6 @@ public class KlaverjasImpl implements Klaverjas {
                     return true;
                 } else if (isSuitInHand(picked_trump)) { //else, if player has trump cards in hand
                     if (card.getSuit() == picked_trump) { //if suit of picked card is trump
-                        //System.out.println(highestvalue);
-                        System.out.println(card.getValue());
                         if (card.getValue() < highestvalue && isHigherValueInHand()) { //if card is played lower in value, and higher value is still in hand
                             return false; //now allowed
                         } else if (card.getValue() > highestvalue) {
@@ -257,6 +258,91 @@ public class KlaverjasImpl implements Klaverjas {
         for(int i = 0; i < 4; i++){
             player.addScore(players[i].getPlayedCard().getPoints());
         }
+        if(hasRoem20()){//if there is roem
+            player.addScore(20);
+        }
+
+        if(hasRoem50()){//if there is roem
+            player.addScore(30); //add 30 more to the previous roem!
+        }
+        if(hasStuk()){//if there is stuk
+            player.addScore(20);
+        }
+
+        if(hasFourOfKind()){
+            player.addScore(100);
+        }
+//        if(hasLastSlag()){//if player get last slag
+//            player.addScore(10);
+//        }
+
+    }
+    //sort cards by rank and suit, from low to high
+    public Card[] sortByRank(Card[] cards){
+        for(int i = 0; i < cards.length; i++){
+            for(int j = i+1; j < cards.length; j++){
+                if(cards[i].getRank() < cards[j].getRank()){ //if rank card 1 is lower than rank card 2
+                    Card temp = cards[i]; //switch cards
+                    cards[i] = cards[j];
+                    cards[j] = temp;
+                }
+
+                if(cards[i].getSuit() < cards[j].getSuit()){ //if rank card 1 is lower than rank card 2
+                    Card temp = cards[i]; //switch cards
+                    cards[i] = cards[j];
+                    cards[j] = temp;
+                }
+            }
+        }
+        return cards;
+    }
+
+    public boolean hasRoem20(){
+        Card[] playedcards = {players[0].getPlayedCard(), players[1].getPlayedCard(), players[2].getPlayedCard(), players[3].getPlayedCard()};
+        playedcards = sortByRank(playedcards);
+
+        for(int j = 0; j < 2; j++){
+            if(playedcards[j].getSuit() == playedcards[j+1].getSuit() && playedcards[j].getSuit() == playedcards[j+2].getSuit()){
+                if(playedcards[j].getRank() == playedcards[j+1].getRank() + 1 && playedcards[j].getRank() == playedcards[j+2].getRank() + 2){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public boolean hasRoem50(){
+        Card[] playedcards = {players[0].getPlayedCard(), players[1].getPlayedCard(), players[2].getPlayedCard(), players[3].getPlayedCard()};
+        playedcards = sortByRank(playedcards);
+
+        if(playedcards[0].getSuit() == playedcards[1].getSuit() && playedcards[0].getSuit() == playedcards[2].getSuit() && playedcards[0].getSuit() == playedcards[3].getSuit()){
+            if(playedcards[0].getRank() == playedcards[1].getRank() + 1 && playedcards[0].getRank() == playedcards[2].getRank() + 2 && playedcards[0].getRank() == playedcards[3].getRank() + 3){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean hasStuk(){
+        Card[] playedcards = {players[0].getPlayedCard(), players[1].getPlayedCard(), players[2].getPlayedCard(), players[3].getPlayedCard()};
+        playedcards = sortByRank(playedcards);
+
+        for(int i = 0; i<3; i++){
+            if(playedcards[i].getSuit() == picked_trump && playedcards[i+1].getSuit() == picked_trump && playedcards[i].getRank() == 6 && playedcards[i+1].getRank() == 5){
+                return true; //K Q of troef gives 20 points extra
+            }
+        }
+        return false;
+    }
+
+    public boolean hasFourOfKind(){
+        Card[] playedcards = {players[0].getPlayedCard(), players[1].getPlayedCard(), players[2].getPlayedCard(), players[3].getPlayedCard()};
+        playedcards = sortByRank(playedcards);
+
+        if(playedcards[0].getRank() == playedcards[1].getRank() && playedcards[0].getRank() == playedcards[2].getRank() && playedcards[0].getRank() == playedcards[3].getRank()){
+            return true;
+        }
+        return false;
     }
 
     @Override

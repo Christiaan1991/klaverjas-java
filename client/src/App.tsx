@@ -5,6 +5,7 @@ import { About } from "./About/About";
 import { Klaverjassen } from "./Klaverjassen/Klaverjassen";
 import "./App.css";
 
+
 export function App() {
     return (
         <Router>

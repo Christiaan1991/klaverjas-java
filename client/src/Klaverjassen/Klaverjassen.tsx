@@ -20,8 +20,9 @@ export function Klaverjassen() {
     if (!gameState) {
         return <StartGame setGameState={setGameState} />
     }
-
-    if(gameState.pickedTrump == 100) { //trump not picked yet!
+   
+    if(gameState.trump == 100) { //trump not picked yet!
+    	console.log("Hier")
      	return <PickTrump gameState={gameState} setGameState={setGameState} />
      }
 
