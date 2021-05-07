@@ -23,42 +23,10 @@ Als je geen troeven hebt, speel je wat anders, en win je de slag nooit
 ## Einde slag
 Als alle 4 de spelers een kaart hebben gespeeld, wint de speler met de hoogste kaart de slag en krijgt de kaarten/punten. Deze speler mag de volgende zet spelen. De kaarten hebben een puntenwaarde die meteen ook de relatieve hoogte van de kaart bepaalt:
 
-## Create table
-Troef
-Niet-troef
-B
-20
-A
-11
-9
-14
-10
-10
-A
-11
-K
-4
-10
-10
-Q
-3
-K
-4
-J
-2
-Q
-3
-9
-0
-8
-0
-8
-0
-7
-0
-7
-0
-
+## Puntenwaarde
+| Troef | Niet-Troef|
+| Kaart | Waarde | Kaart | Waarde |
+|:-----:|:------:|:-----:|:------:|
 
 
 ## Extra punten

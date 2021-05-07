@@ -2,26 +2,26 @@
 var socket = new WebSocket("ws://localhost:8080/events/");
 let userId = null;
 
-var timerID = 0; 
-function keepAlive() { 
-    var timeout = 20000;  
-    if (socket.readyState == socket.OPEN) {  
-        //socket.send('');  
-    }  
-    var timerID = setTimeout(keepAlive, timeout);  
-}  
+// var timerID = 0; 
+// function keepAlive() { 
+//     var timeout = 20000;  
+//     if (socket.readyState == socket.OPEN) {  
+//         //socket.send('');  
+//     }  
+//     var timerID = setTimeout(keepAlive, timeout);  
+// }  
 
-function cancelKeepAlive() {  
-    if (timerID) {  
-        clearTimeout(timerID);  
-    }  
-}
+// function cancelKeepAlive() {  
+//     if (timerID) {  
+//         clearTimeout(timerID);  
+//     }  
+// }
 
 socket.onopen = () => {
     console.log("Websocket is now open!");
 
     //this is to keep the socket keepAlive
-    keepAlive();
+    //keepAlive();
 };
 
 socket.onmessage = message =>{
