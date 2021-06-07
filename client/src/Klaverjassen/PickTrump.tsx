@@ -10,19 +10,15 @@ type PlayProps = {
 
 
 
+
 export function PickTrump({ gameState, setGameState }: PlayProps) {
 
     const [errorMessage, setErrorMessage] = useState("");
+    console.log(name);
 	
 	async function pickTrump(e: React.FormEvent, picked_trump) {
         e.preventDefault(); 
 
-        if(picked_trump == null) {//check if picked card is allows!
-            setErrorMessage("Pick a trump!");
-            return;
-        }
-
-        console.log(picked_trump);
         try {
             const payLoad = {
                 "method": "pick",
@@ -36,6 +32,7 @@ export function PickTrump({ gameState, setGameState }: PlayProps) {
                 console.log(response.name + " has picked " + response.gamestate.trump);
                 const gameState = response.gamestate;
                 setGameState(gameState);
+                console.log(gameState);
             };
         } catch (error) {
             console.error(error.toString());

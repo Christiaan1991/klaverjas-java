@@ -1,27 +1,9 @@
 //create websocket
 var socket = new WebSocket("ws://localhost:8080/events/");
-let userId = null;
-
-// var timerID = 0; 
-// function keepAlive() { 
-//     var timeout = 20000;  
-//     if (socket.readyState == socket.OPEN) {  
-//         //socket.send('');  
-//     }  
-//     var timerID = setTimeout(keepAlive, timeout);  
-// }  
-
-// function cancelKeepAlive() {  
-//     if (timerID) {  
-//         clearTimeout(timerID);  
-//     }  
-// }
+var userId = null;
 
 socket.onopen = () => {
     console.log("Websocket is now open!");
-
-    //this is to keep the socket keepAlive
-    //keepAlive();
 };
 
 socket.onmessage = message =>{
@@ -34,8 +16,8 @@ socket.onmessage = message =>{
     }
 };
 
-export function isOpen() { return socket.readyState === socket.OPEN}
 export default socket; 
+export {userId};
 
 
 

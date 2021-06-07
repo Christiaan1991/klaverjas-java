@@ -22,7 +22,6 @@ export function Klaverjassen() {
     }
    
     if(gameState.trump == 100) { //trump not picked yet!
-    	console.log("Hier")
      	return <PickTrump gameState={gameState} setGameState={setGameState} />
      }
 

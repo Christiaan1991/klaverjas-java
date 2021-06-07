@@ -7,6 +7,8 @@ import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.websocket.server.config.JettyWebSocketServletContainerInitializer;
 import org.glassfish.jersey.servlet.ServletContainer;
 
+import java.time.Duration;
+
 public class App {
     public static void main(String[] args) throws Exception {
         Server server = startServer(8080);
@@ -47,6 +49,9 @@ public class App {
         {
             // Configure default max size
             wsContainer.setMaxTextMessageSize(65535);
+
+            //set IdleTimeout to 5 minutes
+            wsContainer.setIdleTimeout(Duration.ofMinutes(5));
 
             // Add websockets
             wsContainer.addMapping("/events/*", EventSocket.class);

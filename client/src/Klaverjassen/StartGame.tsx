@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import type { GameState } from "../gameState";
 import { Klaverjassen } from "./Klaverjassen";
-import { isOpen } from "../SocketProvider";
-import socket from "../SocketProvider";
+import socket, {userId} from "../SocketProvider";
 import "./StartGame.css";
 
 type StartGameProps = {
@@ -14,8 +13,6 @@ type StartGameProps = {
  * Allows the player to enter their name. A name is required to start the game!
  */
 export function StartGame({ setGameState }: StartGameProps) {
-
-    let userId = null;
 
     const [player, setPlayer] = useState();
     const [errorMessage, setErrorMessage] = useState("");
