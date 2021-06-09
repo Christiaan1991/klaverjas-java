@@ -8,13 +8,25 @@ public class Card {
 	private boolean trump;
 
 	public Card(int rank, int suit, int picked_suit){
-		this.rank = rank;
-		this.suit = suit;
 
-		String[] ranks = {"7", "8", "9", "10", "J", "Q", "K", "A"};
-		char[] suits = {'\u2662', '\u2663', '\u2664', '\u2665'}; //diamonds, clubs, spades, hearts
-		name = ranks[this.rank] + " " + suits[this.suit];
-		trump = isTrump(suit);
+		//create empty card
+		if(rank == -1 && suit == -1){
+			this.rank = rank;
+			this.suit = suit;
+			name = "";
+		}
+
+		//full card
+		else{
+			this.rank = rank;
+			this.suit = suit;
+			this.picked_suit = picked_suit;
+
+			String[] ranks = {"7", "8", "9", "10", "J", "Q", "K", "A"};
+			char[] suits = {'\u2662', '\u2663', '\u2664', '\u2665'}; //diamonds, clubs, spades, hearts
+			name = ranks[this.rank] + " " + suits[this.suit];
+			trump = isTrump(suit);
+		}
 
 	}
 

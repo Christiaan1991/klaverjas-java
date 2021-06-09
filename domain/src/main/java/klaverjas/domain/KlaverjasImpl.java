@@ -42,6 +42,12 @@ public class KlaverjasImpl implements Klaverjas {
         hasTurn = hasSlagTurn;
     }
 
+    public void sortHands(){
+        for(int i = 0; i < 4; i++){
+            players[i].sortHand(players[i].getHand());
+        }
+    }
+
     public void setPickedSuit(int suit){ picked_suit = suit; }
 
     public int getPickedTrump() { return picked_trump; }
@@ -109,7 +115,7 @@ public class KlaverjasImpl implements Klaverjas {
             }
 
             if(isEndOfRound()){ //if end of round
-                setTeamScore(); //we add points from players to team, and set player score back to 0
+                setTeamScore(); //determine if team is nat/pit, we add points from players to team, and set players scores back to 0
                 picked_trump = 100; //reset picked_trump
                 nextRoundTurn();
                 getDeck().shuffleDeck(); //shuffle deck
@@ -168,18 +174,30 @@ public class KlaverjasImpl implements Klaverjas {
     }
 
     public void setTeamScore() {
-//        if(isNat(hasRoundTurn)){
-//
-//        }
-//        if(hasPit()){
-//
-//        }
-        team1_score = players[0].getScore() + players[2].getScore();
-        team2_score = players[1].getScore() + players[3].getScore();
-        players[0].resetScore();
-        players[1].resetScore();
-        players[2].resetScore();
-        players[3].resetScore();
+        if(isNat()){
+            //we add the score to the other team players!
+            players[(hasRoundTurn+1) % 4].addScore(players[hasRoundTurn].getScore() + players[hasRoundTurn].getTrumpScore());
+            players[(hasRoundTurn+3) % 4].addScore(players[(hasRoundTurn+2) % 4].getScore() + players[(hasRoundTurn+2) % 4].getTrumpScore());
+
+            //set score of players who are nat to 0
+            players[hasRoundTurn].resetScores();
+            players[(hasRoundTurn+2) % 4].resetScores();
+        }
+
+        if(hasPit()){
+            //add 100 extra points to score
+            players[hasRoundTurn].addScore(100);
+        }
+
+        //add scores from players to each team, and reset score and trump score of each player
+        team1_score = getTeamScore(0);
+        team2_score = getTeamScore(1);
+
+        //reset players scores
+        players[0].resetScores();
+        players[1].resetScores();
+        players[2].resetScores();
+        players[3].resetScores();
     }
 
     public boolean isSuitInHand(int picked_suit){
@@ -259,24 +277,25 @@ public class KlaverjasImpl implements Klaverjas {
             player.addScore(players[i].getPlayedCard().getPoints());
         }
         if(hasRoem20()){//if there is roem
-            player.addScore(20);
+            player.addTrumpScore(20);
         }
 
         if(hasRoem50()){//if there is roem
-            player.addScore(30); //add 30 more to the previous roem!
+            player.addTrumpScore(30); //add 30 more to the previous roem!
         }
         if(hasStuk()){//if there is stuk
-            player.addScore(20);
+            player.addTrumpScore(20);
         }
 
         if(hasFourOfKind()){
-            player.addScore(100);
+            player.addTrumpScore(100);
         }
-//        if(hasLastSlag()){//if player get last slag
-//            player.addScore(10);
-//        }
+        if(hasLastSlag()){//if player get last slag
+            player.addScore(10);
+        }
 
     }
+
     //sort cards by rank and suit, from low to high
     public Card[] sortByRank(Card[] cards){
         for(int i = 0; i < cards.length; i++){
@@ -287,7 +306,7 @@ public class KlaverjasImpl implements Klaverjas {
                     cards[j] = temp;
                 }
 
-                if(cards[i].getSuit() < cards[j].getSuit()){ //if rank card 1 is lower than rank card 2
+                if(cards[i].getSuit() < cards[j].getSuit()){ //if suit card 1 is lower than suit card 2
                     Card temp = cards[i]; //switch cards
                     cards[i] = cards[j];
                     cards[j] = temp;
@@ -345,6 +364,47 @@ public class KlaverjasImpl implements Klaverjas {
         return false;
     }
 
+    public boolean hasLastSlag(){
+        //if laatste slag, player has no cards anymore in hand
+        if(isEndOfRound()) {
+            return true;
+        } else{
+            return false;
+        }
+    }
+
+    public boolean isNat(){
+
+        //calculate total score
+        int score = getTeamScore(hasRoundTurn);
+        int score2 = getTeamScore(hasRoundTurn + 1);
+        if(score <= score2){ //team who hasRoundTurn did not get enough points!
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
+    public boolean hasPit(){
+
+        //calculate total score
+        int score2 = getTeamScore(hasRoundTurn + 1);
+
+        if(score2 == 0){
+            return true;
+        }
+        else{
+            return false;
+        }
+
+        //tegenpit is just 162 points, not 100 points extra
+    }
+
+    public int getTeamScore(int team){
+        return players[team].getScore() + players[team].getTrumpScore() + players[(team + 2) % 4].getScore() + players[(team + 2) % 4].getTrumpScore();
+    }
+
     @Override
     public boolean isPlayersTurn(int player) {
         if(player == hasTurn){
@@ -374,6 +434,10 @@ public class KlaverjasImpl implements Klaverjas {
             return false;
         }
     }
+
+    public void setPlayersTurn(int player) { hasTurn = player;}
+
+    public void setPlayersRoundTurn(int player) { hasRoundTurn = player;}
 
     public void nextTurn(){
         int newTurn = 0;

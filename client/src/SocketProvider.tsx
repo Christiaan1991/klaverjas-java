@@ -1,5 +1,5 @@
 //create websocket
-var socket = new WebSocket("ws://localhost:8080/events/");
+var socket = new WebSocket("ws://192.168.2.11:8080/events/");
 var userId = null;
 
 socket.onopen = () => {

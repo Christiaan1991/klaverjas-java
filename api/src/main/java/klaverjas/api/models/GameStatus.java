@@ -7,8 +7,7 @@ public class GameStatus {
     String winner;
     public String getWinner() { return winner; }
 
-    public GameStatus(klaverjas.domain.Klaverjas klaverjas,
-            String namePlayer1, String namePlayer2, String namePlayer3, String nameplayer4) {
+    public GameStatus(klaverjas.domain.Klaverjas klaverjas) {
         this.endOfGame = klaverjas.isEndOfGame();
         int winner = klaverjas.getWinner();
         if(winner == klaverjas.NO_TEAM) {

@@ -6,34 +6,29 @@ package klaverjas.api.models;
 // objects will be converted to JSON objects.
 public class Klaverjas {
     public Klaverjas(klaverjas.domain.Klaverjas klaverjas,
-                     String namePlayer1, String namePlayer2, String namePlayer3, String namePlayer4) {
+                     String[] names, int ws_id) {
+
+        //ID send by websocket
+        this.ws_id = ws_id;
+
         players = new Player[4];
-        players[0] = new Player(klaverjas, namePlayer1, true, klaverjas.PLAYER_ONE);
-        players[1] = new Player(klaverjas, namePlayer2, false, klaverjas.PLAYER_TWO);
-        players[2] = new Player(klaverjas, namePlayer3, true, klaverjas.PLAYER_THREE);
-        players[3] = new Player(klaverjas, namePlayer4, false, klaverjas.PLAYER_FOUR);
-        gameStatus = new GameStatus(klaverjas, namePlayer1, namePlayer2, namePlayer3, namePlayer4);
+        players[0] = new Player(klaverjas, names[0], true, 0, ws_id);
+        players[1] = new Player(klaverjas, names[1], false, 1, ws_id);
+        players[2] = new Player(klaverjas, names[2], true, 2, ws_id);
+        players[3] = new Player(klaverjas, names[3], false, 3, ws_id);
+
+        gameStatus = new GameStatus(klaverjas);
         team1score = klaverjas.getTeam1Score();
         team2score = klaverjas.getTeam2Score();
-        correctmove = klaverjas.getCorrectMove();
-        trump = klaverjas.getPickedTrump();
+        correct_move = klaverjas.getCorrectMove();
+        picked_trump = klaverjas.getPickedTrump();
     }
 
-    boolean correctmove;
-    public boolean getCorrectMove() { return correctmove; }
-
+    boolean correct_move;
     Player[] players;
-    public Player[] getPlayers() { return players; }
-
+    int ws_id;
     int team1score;
-    public int getTeam1score() { return team1score; }
-
     int team2score;
-    public int getTeam2score() { return team2score; }
-
     GameStatus gameStatus;
-    public GameStatus getGameStatus() { return gameStatus; }
-
-    int trump;
-    public int getPickedTrump() { return trump; }
+    int picked_trump;
 }

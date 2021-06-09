@@ -12,11 +12,11 @@ import java.util.concurrent.CountDownLatch;
 
 public class EventSocket extends WebSocketAdapter
 {
-    private static HashMap<EventSocket, String> sockets = new HashMap<>(); //all connections that are made
+    private static final HashMap<EventSocket, String> sockets = new HashMap<>(); //all connections that are made
     private final CountDownLatch closureLatch = new CountDownLatch(1);
     private Session session;
-    private String userId;
-    private static HashMap<EventSocket, String[]> players = new HashMap<>();
+
+    private static final HashMap<EventSocket, String[]> players = new HashMap<>();
     private final static KlaverjasImpl klaverjas = new KlaverjasImpl();
     private static int numOfConnectedPlayers = 0;
 
@@ -26,19 +26,18 @@ public class EventSocket extends WebSocketAdapter
         this.session = session;
 
         //create new userId
-        this.userId = this.getMyUserId();
+        String userId = this.getMyUserId();
 
         // map this unique ID to this connection
-        EventSocket.sockets.put(this, this.userId);
+        EventSocket.sockets.put(this, userId);
 
-        //create new gamesetup for this connection
-        Gamesetup game = new Gamesetup();
-        game.setUserId(userId);
-        game.setMethod("connect");
+        //create new reponse
+        Response response = new Response();
+        response.setUserId(userId);
 
         //we package the Gamesetup obj back into json, and send it to the client who created the room!
         Gson gson2 = new Gson();
-        String payload = gson2.toJson(game);
+        String payload = gson2.toJson(response);
 
 
         // broadcast this new connection (with its unique ID) to all connected clients
@@ -55,47 +54,54 @@ public class EventSocket extends WebSocketAdapter
 
         try {
             Gson gson = new Gson();
-            Gamesetup setup = gson.fromJson(message, Gamesetup.class);
+            Input input = gson.fromJson(message, Input.class);
 
-            if(setup.getMethod().equals("join")){
+            if(input.getMethod().equals("join")){
 
-                //get userId
-                String userId = setup.getUserId();
                 //generate new game ID
-                String name = setup.getName();
+                String name = input.getName();
 
+                //add name to the list of players, and give each connection a name and which player
                 String[] playerKey = {name, String.valueOf(numOfConnectedPlayers)};
-
-                //add name to the list of clients
                 players.put(this, playerKey);
-
-                //we set the number of connected clients in the Gamesetup
-                setup.setNumberOfPlayers(players.size());
-                setup.setName();
                 numOfConnectedPlayers++;
 
-                if(setup.getNumberOfPlayers() == 4){
-                    System.out.println("We can start the game here!");
-                    setup.setGamestate(createNewKlaverjasGame());
+                System.out.println(players);
+
+                if(players.size() != 4){
+                    //we set the number of connected clients in the Gamesetup
+                    Response response = new Response();
+                    response.setNumberOfPlayers(players.size());
+                    response.setName(name);
+                    sendResponse(response);
                 }
-                sendToAllClients(setup);
+
+                else{
+                    System.out.println("We can start the game here!");
+                    klaverjas.getDeck().shuffleDeck();
+                    klaverjas.deal();
+                    klaverjas.sortHands();
+
+                    sendGameState();
+                }
+
             }
 
-            else if(setup.getMethod().equals("pick")){
+            else if(input.getMethod().equals("pick")){
                 //check if websocket matches with players turn
                 if(klaverjas.isPlayersTurn(Integer.parseInt(players.get(this)[1]))){
-                    setup = pickTrump(setup);
-                    sendToAllClients(setup);
+                    pickTrump(input);
+                    sendGameState();
                 } else{
                     System.out.println("move not allowed by this player!");
                 }
 
             }
 
-            else if(setup.getMethod().equals("play")){
+            else if(input.getMethod().equals("play")){
                 if(klaverjas.isPlayersTurn(Integer.parseInt(players.get(this)[1]))) {
-                    setup = performMove(setup);
-                    sendToAllClients(setup);
+                    performMove(input);
+                    sendGameState();
                 } else{
                     System.out.println("move not allowed by this player!");
                 }
@@ -119,7 +125,6 @@ public class EventSocket extends WebSocketAdapter
             players.remove(this);
         }
 
-        System.out.println(sockets);
         System.out.println("Socket Closed: [" + statusCode + "] " + reason);
         closureLatch.countDown();
     }
@@ -148,20 +153,9 @@ public class EventSocket extends WebSocketAdapter
         }
     }
 
-    public Klaverjas createNewKlaverjasGame() {
-
-        //shuffle cards and deal to players
-        klaverjas.getDeck().shuffleDeck();
-        klaverjas.deal();
-
-        String[] names = getAllNames();
-        return new Klaverjas(klaverjas, names[0], names[1], names[2], names[3]);
-
-    }
-
-    public Gamesetup performMove(Gamesetup setup){
-        Integer suit = setup.getSuit();
-        Integer rank = setup.getRank();
+    public void performMove(Input input){
+        Integer suit = input.getSuit();
+        Integer rank = input.getRank();
 
         try {
             //apply move to the played card
@@ -169,32 +163,45 @@ public class EventSocket extends WebSocketAdapter
         } catch (Exception e){
             System.out.println("move cannot be performed");
         }
-
-        //create new klaverjas state, and set gameState
-        String[] names = getAllNames();
-        setup.setGamestate(new Klaverjas(klaverjas, names[0], names[1], names[2], names[3]));
-        return setup;
     }
 
-    public Gamesetup pickTrump(Gamesetup setup){
+    public void pickTrump(Input input){
 
-        Integer trump = setup.getTrump();
+        Integer trump = input.getTrump();
 
         //apply move to the played card
         klaverjas.pickTrump(trump);
+        klaverjas.sortHands();
 
-        //create new klaverjas state, and set gameState
-        String[] names = getAllNames();
-        setup.setGamestate(new Klaverjas(klaverjas, names[0], names[1], names[2], names[3]));
-        return setup;
     }
 
-    public void sendToAllClients(Gamesetup setup){
-        //we package the Gamesetup obj back into json, and send it to the client who created the room!
-        Gson gson2 = new Gson();
-        String payload = gson2.toJson(setup);
+    public void sendResponse(Response response){
 
-        for (EventSocket dstSocket : EventSocket.sockets.keySet()) {
+        for (EventSocket dstSocket : EventSocket.players.keySet()) {
+
+            //we package the reponse back into json, and send it to the client!
+            Gson gson2 = new Gson();
+            String payload = gson2.toJson(response);
+            dstSocket.sendToClient(payload);
+        }
+    }
+
+    public void sendGameState(){
+
+        //create new response
+        Response response = new Response();
+        response.setNumberOfPlayers(players.size());
+
+        for (EventSocket dstSocket : EventSocket.players.keySet()) {
+
+            //for every websocket, we create a seperate gameState response
+
+            response.setGamestate(new Klaverjas(klaverjas, getAllNames(), Integer.parseInt(players.get(dstSocket)[1])));
+
+            //we package the reponse back into json, and send it to the client!
+            Gson gson2 = new Gson();
+            String payload = gson2.toJson(response);
+
             dstSocket.sendToClient(payload);
         }
     }

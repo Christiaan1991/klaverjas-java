@@ -29,7 +29,7 @@ export function PickTrump({ gameState, setGameState }: PlayProps) {
             socket.onmessage = message =>{
                 const response = JSON.parse(message.data);
 
-                console.log(response.name + " has picked " + response.gamestate.trump);
+                console.log(response.name + " has picked " + response.gamestate.picked_trump);
                 const gameState = response.gamestate;
                 setGameState(gameState);
                 console.log(gameState);
@@ -77,40 +77,40 @@ export function PickTrump({ gameState, setGameState }: PlayProps) {
 
                 <div className="grid-container">
                     <div className="p1">
-                        <div>{gameState.players[0].name}</div>
+                        <div>{gameState.players[gameState.ws_id % 4].name}</div>
                         <table className="player1">
                             <tbody>
-                            <tr>{gameState.players[0].cards.reverse().map((card) => 
+                            <tr>{gameState.players[gameState.ws_id % 4].cards.reverse().map((card) => 
                             <td><button className="cards"> {card.name} </button></td>)}
                             </tr>
                             </tbody>
                         </table>
                     </div>
                     <div className="p2">
-                        <div>{gameState.players[1].name}</div>
+                        <div>{gameState.players[(gameState.ws_id+1) % 4].name}</div>
                          <table className="player2">
                             <tbody>
-                            <td>{gameState.players[1].cards.reverse().map((card) => 
+                            <td>{gameState.players[(gameState.ws_id+1) % 4].cards.reverse().map((card) => 
                             <tr><button className="cards-side"> {card.name} </button></tr>)}
                             </td>
                             </tbody>
                         </table>
                     </div>
                     <div className="p3">
-                        <div>{gameState.players[2].name}</div>
+                        <div>{gameState.players[(gameState.ws_id+2) % 4].name}</div>
                          <table className="player3">
                             <tbody>
-                            <tr>{gameState.players[2].cards.reverse().map((card) => 
+                            <tr>{gameState.players[(gameState.ws_id+2) % 4].cards.reverse().map((card) => 
                             <td><button className="cards"> {card.name} </button></td>)}
                             </tr>
                             </tbody>
                         </table>
                     </div>
                     <div className="p4">
-                        <div>{gameState.players[3].name}</div>
+                        <div>{gameState.players[(gameState.ws_id+3) % 4].name}</div>
                          <table className="player4">
                             <tbody>
-                            <td>{gameState.players[3].cards.reverse().map((card) => 
+                            <td>{gameState.players[(gameState.ws_id+3) % 4].cards.reverse().map((card) => 
                             <tr><button className="cards-side"> {card.name} </button></tr>)}
                             </td>
                             </tbody>
