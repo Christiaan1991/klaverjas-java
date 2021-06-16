@@ -32,7 +32,7 @@ export function PickTrump({ gameState, setGameState }: PlayProps) {
                 console.log(response.name + " has picked " + response.gamestate.picked_trump);
                 const gameState = response.gamestate;
                 setGameState(gameState);
-                console.log(gameState);
+                //console.log(gameState);
             };
         } catch (error) {
             console.error(error.toString());
