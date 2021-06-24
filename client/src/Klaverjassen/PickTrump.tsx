@@ -2,13 +2,14 @@ import React, {useState} from "react";
 import type { GameState } from "../gameState";
 import socket from "../SocketProvider";
 import "./PickTrump.css";
+import "./Cards.css";
 
 type PlayProps = {
     gameState: GameState;
     setGameState(newGameState: GameState): void;
 }
 
-
+type CardDisplayProps = {suit: number, rank: number};
 
 
 export function PickTrump({ gameState, setGameState }: PlayProps) {
@@ -81,7 +82,7 @@ export function PickTrump({ gameState, setGameState }: PlayProps) {
                         <table className="player1">
                             <tbody>
                             <tr>{gameState.players[gameState.ws_id % 4].cards.reverse().map((card) => 
-                            <td><button className="cards"> {card.name} </button></td>)}
+                            <DisplayCard suit={card.suit} rank={card.rank}/>)}
                             </tr>
                             </tbody>
                         </table>
@@ -91,7 +92,7 @@ export function PickTrump({ gameState, setGameState }: PlayProps) {
                          <table className="player2">
                             <tbody>
                             <td>{gameState.players[(gameState.ws_id+1) % 4].cards.reverse().map((card) => 
-                            <tr><button className="cards-side"> {card.name} </button></tr>)}
+                            <tr><BackCardSide/></tr>)}
                             </td>
                             </tbody>
                         </table>
@@ -101,7 +102,7 @@ export function PickTrump({ gameState, setGameState }: PlayProps) {
                          <table className="player3">
                             <tbody>
                             <tr>{gameState.players[(gameState.ws_id+2) % 4].cards.reverse().map((card) => 
-                            <td><button className="cards"> {card.name} </button></td>)}
+                            <BackCard/>)}
                             </tr>
                             </tbody>
                         </table>
@@ -111,7 +112,7 @@ export function PickTrump({ gameState, setGameState }: PlayProps) {
                          <table className="player4">
                             <tbody>
                             <td>{gameState.players[(gameState.ws_id+3) % 4].cards.reverse().map((card) => 
-                            <tr><button className="cards-side"> {card.name} </button></tr>)}
+                            <tr><BackCardSide/></tr>)}
                             </td>
                             </tbody>
                         </table>
@@ -129,5 +130,17 @@ export function PickTrump({ gameState, setGameState }: PlayProps) {
             </div>
         </body>
     )
+
+    function DisplayCard({suit, rank} : CardDisplayProps){
+        return <button className={"Card" + rank + suit}></button>
+    }
+
+    function BackCard(){
+        return <button className="backCard"></button>
+    }
+
+    function BackCardSide(){
+        return <button className="backCardSide"></button>
+    }
 }
 

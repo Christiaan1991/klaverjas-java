@@ -6,7 +6,6 @@ public class Response {
     String userId;
     Integer NumberOfPlayers;
     String name;
-//    Integer trump;
     Klaverjas gamestate;
 
     public void setUserId(String userId) {
@@ -17,6 +16,5 @@ public class Response {
     public void setGamestate(Klaverjas gamestate) {
         this.gamestate = gamestate;
     }
-//    public void setTrump(Integer trump) { this.trump = trump; }
 
 }

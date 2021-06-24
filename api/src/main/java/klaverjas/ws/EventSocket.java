@@ -78,6 +78,7 @@ public class EventSocket extends WebSocketAdapter
 
                 else{
                     System.out.println("We can start the game here!");
+                    System.out.println(klaverjas);
                     klaverjas.getDeck().shuffleDeck();
                     klaverjas.deal();
                     klaverjas.sortHands();
@@ -195,7 +196,6 @@ public class EventSocket extends WebSocketAdapter
         for (EventSocket dstSocket : EventSocket.players.keySet()) {
 
             //for every websocket, we create a seperate gameState response
-
             response.setGamestate(new Klaverjas(klaverjas, getAllNames(), Integer.parseInt(players.get(dstSocket)[1])));
 
             //we package the reponse back into json, and send it to the client!

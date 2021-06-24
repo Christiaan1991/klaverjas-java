@@ -1,59 +1,11 @@
 /** Add some styles */
-
-.cards {
-  display: inline-block;
-  width: 4.5em;
-  height: 6.9em;
-  border: 3px solid #667;
-  border-radius: .3em;
-  -moz-border-radius: .3em;
-  -webkit-border-radius: .3em;
-  -khtml-border-radius: .3em;
-  padding: .25em;
-  margin: 0 .5em .5em 0;
-  text-align: center;
-  font-size: 1.0em; /* @change: adjust this value to make bigger or smaller cards */
-  font-weight: normal;
-  font-family: Tahoma, sans-serif;
-  position: relative;
-  background-color: #fff;
-  -moz-box-shadow: .2em .2em .5em #333;
-  -webkit-box-shadow: .2em .2em .5em #333;
-  box-shadow: .2em .2em .5em #333;
-}
-
-.cards-side {
-  display: inline-block;
-  vertical-align: middle;
-  width: 6.9em;
-  height: 4.5em;
-  border: 3px solid #667;
-  border-radius: .3em;
-  -moz-border-radius: .3em;
-  -webkit-border-radius: .3em;
-  -khtml-border-radius: .3em;
-  padding: .25em;
-  margin: 0 .5em .5em 0;
-  text-align: center;
-  font-size: 1.0em; /* @change: adjust this value to make bigger or smaller cards */
-  font-weight: normal;
-  font-family: Tahoma, sans-serif;
-  position: relative;
-  background-color: #fff;
-  -moz-box-shadow: .2em .2em .5em #333;
-  -webkit-box-shadow: .2em .2em .5em #333;
-  box-shadow: .2em .2em .5em #333;
-}
-
-.p1 {grid-area: p1;}
-.p2 {grid-area: p2;}
-.p3 {grid-area: p3;}
-.p4 {grid-area: p4;}
-.p5 {grid-area: p5;}
-.p6 {grid-area: p6;}
-.p7 {grid-area: p7;}
-.p8 {grid-area: p8;}
-.p9 {grid-area: p9;}
+.block {
+    width: 2.2em;
+    height: 2.2em;
+    vertical-align: middle;
+    font-size: 2.0em;
+    background-color: #fff;
+} 
 
 .grid-container {
   display: grid;
@@ -73,14 +25,24 @@
 }
 
 .grid-container > div {
-  background-color: rgba(255, 255, 255, 0.8);
+  background-color: rgba(255, 255, 255, 2.0);
   text-align: center;
-  padding: 30px 10px;
+  padding: 10px 10px;
   font-size: 20px;
 }
 
+.p1 {grid-area: p1;}
+.p2 {grid-area: p2;}
+.p3 {grid-area: p3;}
+.p4 {grid-area: p4;}
+.p5 {grid-area: p5;}
+.p6 {grid-area: p6;}
+.p7 {grid-area: p7;}
+.p8 {grid-area: p8;}
+.p9 {grid-area: p9;}
+
 .scoretable, th, td {
-  font-size: 1.2em; /* @change: adjust this value to make bigger or smaller cards */
+  font-size: 1.2em; 
   border: 0.5px solid black;
   border-collapse: collapse;
   width: 50%
@@ -89,12 +51,6 @@
 
 td {
   text-align: center;
+  width: 100px;
 }
 
-.block {
-    width: 2.2em;
-    height: 2.2em;
-    vertical-align: middle;
-    font-size: 2.0em;
-    background-color: #fff;
-} 

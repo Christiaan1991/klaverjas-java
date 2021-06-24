@@ -1,6 +1,6 @@
 //create websocket
-var socket = new WebSocket("ws://192.168.2.11:8080/events/");
-var userId = null;
+var socket = new WebSocket("ws://localhost/events/");
+var socket = new WebSocket("ws://localhost/anderedingen/");
 
 socket.onopen = () => {
     console.log("Websocket is now open!");
@@ -15,6 +15,8 @@ socket.onmessage = message =>{
         console.log("clientID is successfully set: " + userId);
     }
 };
+
+var userId = null;
 
 export default socket; 
 export {userId};

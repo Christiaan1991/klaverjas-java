@@ -51,7 +51,7 @@ public class App {
             wsContainer.setMaxTextMessageSize(65535);
 
             //set IdleTimeout to 5 minutes
-            wsContainer.setIdleTimeout(Duration.ofMinutes(5));
+            wsContainer.setIdleTimeout(Duration.ofHours(6));
 
             // Add websockets
             wsContainer.addMapping("/events/*", EventSocket.class);

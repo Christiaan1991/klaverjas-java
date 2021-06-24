@@ -307,7 +307,7 @@ class klaverjastest {
             assertEquals(0, klaverjas.getPlayers()[2].getScore());
             assertEquals(0, klaverjas.getPlayers()[3].getScore());
             assertEquals(0, klaverjas.getTeam1Score());
-            assertEquals(11 + 2, klaverjas.getTeam2Score());
+            assertEquals(11 + 2 + 10, klaverjas.getTeam2Score());
         }
 
         @Test

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { StartGame } from "./StartGame";
 import { Play } from "./Play";
 import { PickTrump } from "./PickTrump";
+import { WaitGame } from "./WaitGame";
 import type { GameState } from "../gameState";
 import "./Klaverjassen.css";
 
@@ -17,11 +18,12 @@ export function Klaverjassen() {
 
     const [ gameState, setGameState ] = useState<GameState | undefined>(undefined);
 
+    
     if (!gameState) {
         return <StartGame setGameState={setGameState} />
-    }
-   
-    if(gameState.picked_trump == 100) { //trump not picked yet!
+    } 
+
+    else if(gameState.picked_trump == 100) { //trump not picked yet!
      	return <PickTrump gameState={gameState} setGameState={setGameState} />
      }
 
