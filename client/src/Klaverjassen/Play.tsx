@@ -13,14 +13,11 @@ export function Play({ gameState, setGameState }: PlayProps) {
 	const [Cardrank, setCardRank] = useState();
     const [Cardsuit, setCardSuit] = useState();
 	const [errorMessage, setErrorMessage] = useState("");
+
     var trumpstring;
 
 	async function pickCard(e: React.FormEvent, card: any, turn: any) {
         e.preventDefault(); 
-        // if(!turn) {//check if picked card is allows!
-        //     setErrorMessage("Move not allowed, play your own Card!");
-        //     return;
-        // }
 
         setErrorMessage("");
         try {
@@ -39,7 +36,7 @@ export function Play({ gameState, setGameState }: PlayProps) {
                 setGameState(gameState);
             };
         } catch (error) {
-            console.error(error.toString());
+            setErrorMessage(error.toString());
         }
 
     }

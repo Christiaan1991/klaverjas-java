@@ -2,7 +2,7 @@ package klaverjas.domain;
 
 public class Deck {
     public static final int NCARDS = 32;
-    public static final int NSHUFFLE = 100;
+    public static final int NSHUFFLE = 1000;
     private int currentCard;
 
     private Card[] cards;

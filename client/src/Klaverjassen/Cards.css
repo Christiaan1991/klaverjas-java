@@ -1,0 +1,250 @@
+/** All individual cards */
+
+:root { 
+  --deckSize: 1;
+  --cardWidth: 5.5em;
+  --cardHeight:  7.8em;
+}
+
+.backCard {
+  background:  url(blue_back.jpg) no-repeat center center;
+  background-size: calc(120px * var(--deckSize));
+
+  display: inline-block;
+  width: var(--cardWidth);
+  height: 6.9em;
+  border: 3px solid #667;
+  border-radius: .3em;
+  -moz-border-radius: .3em;
+  -webkit-border-radius: .3em;
+  -khtml-border-radius: .3em;
+  padding: .25em;
+  margin: 0 .5em .5em 0;
+  text-align: center;
+  font-size: 1.0em; /* @change: adjust this value to make bigger or smaller cards */
+  font-weight: normal;
+  font-family: Tahoma, sans-serif;
+  position: relative;
+  background-color: #fff;
+  -moz-box-shadow: .2em .2em .5em #333;
+  -webkit-box-shadow: .2em .2em .5em #333;
+  box-shadow: .2em .2em .5em #333;
+}
+
+.backCardSide {
+  background:  url(blue_back.jpg) no-repeat center center;
+  background-size: calc(120px * var(--deckSize));
+  transform: rotate(90deg);
+
+  display: inline-block;
+  vertical-align: middle;
+  height: 6.9em;
+  width: var(--cardWidth);
+
+  border: 3px solid #667;
+  border-radius: .3em;
+  -moz-border-radius: .3em;
+  -webkit-border-radius: .3em;
+  -khtml-border-radius: .3em;
+  margin: 0 .25em .5em 0;
+  font-size: 1.0em; /* @change: adjust this value to make bigger or smaller cards */
+  font-weight: normal;
+  font-family: Tahoma, sans-serif;
+  position: relative;
+  background-color: #fff;
+  -moz-box-shadow: .2em .2em .5em #333;
+  -webkit-box-shadow: .2em .2em .5em #333;
+  box-shadow: .2em .2em .5em #333;
+}
+
+.Card00, .Card01, .Card02, .Card03, .Card10, .Card11, .Card12, .Card13, .Card20, .Card21, .Card22, .Card23, .Card30, .Card31, .Card32, .Card33, .Card40, .Card41, .Card42, .Card43, .Card50, .Card51, .Card52, .Card53, .Card60, .Card61, .Card62, .Card63, .Card70, .Card71, .Card72, .Card73 {
+  display: inline-block;
+
+  width: var(--cardWidth);
+  height: var(--cardHeight);
+  border: 3px solid #667;
+  border-radius: .3em;
+  -moz-border-radius: .3em;
+  -webkit-border-radius: .3em;
+  -khtml-border-radius: .3em;
+  padding: .25em;
+  margin: 0 .5em .5em 0;
+  text-align: center;
+  font-size: 1.0em; /* @change: adjust this value to make bigger or smaller cards */
+  font-weight: normal;
+  font-family: Tahoma, sans-serif;
+  
+  background-color: #fff;
+  
+  -moz-box-shadow: .2em .2em .5em #333;
+  -webkit-box-shadow: .2em .2em .5em #333;
+  box-shadow: .2em .2em .5em #333;
+}
+
+.Card00 {
+  background: url(7D.jpg) no-repeat center center;
+  background-size: calc(101px * var(--deckSize));
+}
+
+.Card00:hover {
+  background: url(7D.jpg) no-repeat center center;
+  background-size: calc(101px * var(--deckSize));
+  position: relative; bottom: 20px;
+}
+
+.Card10 {
+  background: url(8D.jpg) no-repeat center center;
+  background-size: calc(101px * var(--deckSize));
+}
+
+.Card20 {
+  background: url(9D.jpg) no-repeat center center;
+  background-size: calc(101px * var(--deckSize));
+}
+
+.Card30 {
+  background: url(10D.jpg) no-repeat center center;
+  background-size: calc(101px * var(--deckSize));
+}
+
+.Card40 {
+  background: url(JD.jpg) no-repeat center center;
+  background-size: calc(101px * var(--deckSize));
+}
+
+.Card50 {
+  background: url(QD.jpg) no-repeat center center;
+  background-size: calc(101px * var(--deckSize));
+}
+
+.Card60 {
+  background: url(KD.jpg) no-repeat center center;
+  background-size: calc(101px * var(--deckSize));
+}
+
+.Card70 {
+  background: url(AD.jpg) no-repeat center center;
+  background-size: calc(101px * var(--deckSize));
+}
+
+.Card01 {
+  background: url(7C.jpg) no-repeat center center;
+  background-size: calc(101px * var(--deckSize));
+}
+
+.Card11 {
+  background: url(8C.jpg) no-repeat center center;
+  background-size: calc(101px * var(--deckSize));
+}
+
+.Card21 {
+  background: url(9C.jpg) no-repeat center center;
+  background-size: calc(101px * var(--deckSize));
+}
+
+.Card31 {
+  background: url(10C.jpg) no-repeat center center;
+  background-size: calc(101px * var(--deckSize));
+}
+
+.Card41 {
+  background: url(JC.jpg) no-repeat center center;
+  background-size: calc(101px * var(--deckSize));
+}
+
+.Card51 {
+  background: url(QC.jpg) no-repeat center center;
+  background-size: calc(101px * var(--deckSize));
+}
+
+.Card61 {
+  background: url(KC.jpg) no-repeat center center;
+  background-size: calc(101px * var(--deckSize));
+}
+
+.Card71 {
+  background: url(AC.jpg) no-repeat center center;
+  background-size: calc(101px * var(--deckSize));
+}
+
+.Card02 {
+  background: url(7S.jpg) no-repeat center center;
+  background-size: calc(101px * var(--deckSize));
+}
+
+.Card12 {
+  background: url(8S.jpg) no-repeat center center;
+  background-size: calc(101px * var(--deckSize));
+}
+
+.Card22 {
+  background: url(9S.jpg) no-repeat center center;
+  background-size: calc(101px * var(--deckSize));
+}
+
+.Card32 {
+  background: url(10S.jpg) no-repeat center center;
+  background-size: calc(101px * var(--deckSize));
+}
+
+.Card42 {
+  background: url(JS.jpg) no-repeat center center;
+  background-size: calc(101px * var(--deckSize));
+}
+
+.Card52 {
+  background: url(QS.jpg) no-repeat center center;
+  background-size: calc(101px * var(--deckSize));
+}
+
+.Card62 {
+  background: url(KS.jpg) no-repeat center center;
+  background-size: calc(101px * var(--deckSize));
+}
+
+.Card72 {
+  background: url(AS.jpg) no-repeat center center;
+  background-size: calc(101px * var(--deckSize));
+}
+
+.Card03 {
+  background: url(7H.jpg) no-repeat center center;
+  background-size: calc(101px * var(--deckSize));
+}
+
+.Card13 {
+  background: url(8H.jpg) no-repeat center center;
+  background-size: calc(101px * var(--deckSize));
+}
+
+.Card23 {
+  background: url(9H.jpg) no-repeat center center;
+  background-size: calc(101px * var(--deckSize));
+}
+
+.Card33 {
+  background: url(10H.jpg) no-repeat center center;
+  background-size: calc(101px * var(--deckSize));
+}
+
+.Card43 {
+  background: url(JH.jpg) no-repeat center center;
+  background-size: calc(101px * var(--deckSize));
+}
+
+.Card53 {
+  background: url(QH.jpg) no-repeat center center;
+  background-size: calc(101px * var(--deckSize));
+}
+
+.Card63 {
+  background: url(KH.jpg) no-repeat center center;
+  background-size: calc(101px * var(--deckSize));
+}
+
+.Card73 {
+  background: url(AH.jpg) no-repeat center center;
+  background-size: calc(101px * var(--deckSize));
+}
+
+/** end */

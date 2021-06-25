@@ -8,13 +8,14 @@ type StartGameProps = {
     setGameState(newGameState: GameState): void;
 }
 
-
 /**
  * Allows the player to enter their name. A name is required to start the game!
  */
-export function StartGame({ setGameState }: StartGameProps) {
+function StartGame({ setGameState }: StartGameProps) {
 
     const [player, setPlayer] = useState();
+    const [player_name, setPlayerName] = useState();
+    const [number_of_players, setNumberOfPlayers] = useState();
     const [errorMessage, setErrorMessage] = useState("");
 
     async function tryStartGame(e: React.FormEvent) {
@@ -39,19 +40,10 @@ export function StartGame({ setGameState }: StartGameProps) {
 
             socket.onmessage = message =>{
                 const response = JSON.parse(message.data);
-
-                console.log(response.name + " has joined the game!")
+                setPlayerName(response.name);
+                setNumberOfPlayers(response.NumberOfPlayers);
+                console.log(player + " has joined the game!")
                 console.log(response.NumberOfPlayers +" players are in game!");
-                
-
-                // if(response.NumberOfPlayers < 4){
-                //     return ( 
-                //         <body>
-                //         <h1>Welcome to Christiaan's klaverjas application!</h1>
-                //         <div>{"Waiting for other players..."}</div>
-                //         </body>
-                //     )
-                // }
 
                 if(response.NumberOfPlayers == 4){
                     console.log("We start the game!!")
@@ -59,6 +51,17 @@ export function StartGame({ setGameState }: StartGameProps) {
                     setGameState(gameState);
                     console.log(gameState);
                 }
+
+                else{
+                    console.log("komt hier");
+                    return (
+                        <body>
+                        <h1>Welcome to Christiaan's klaverjas application!</h1>
+                        <p>Waiting for other players...</p>
+                        </body>
+                    )
+                }
+
             };
 
         } catch (error) {
@@ -68,7 +71,8 @@ export function StartGame({ setGameState }: StartGameProps) {
 
     }
 
-    return (
+    if(!player_name){
+        return (
         <body>
         <h1>Welcome to Christiaan's klaverjas application!</h1>
             <form onSubmit={(e) => tryStartGame(e)}>
@@ -84,5 +88,23 @@ export function StartGame({ setGameState }: StartGameProps) {
                 </button>
             </form>
         </body>
-    )
+        )
+    } 
+
+    else{
+        return (
+            <body>
+            <h1>Welcome to Christiaan's klaverjas application!</h1>
+            <p>Thank you for joining the game, {player_name}!</p>
+            <p>Waiting for other players...({number_of_players}/4)</p>
+            </body>
+        )
+    }
+
+    
+
 }
+
+export { StartGame }
+
+
