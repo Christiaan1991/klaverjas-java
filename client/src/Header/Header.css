@@ -1,6 +1,6 @@
 .main-header {
     background-color: white;
-    color: green;
+    color: red;
     font-size: 2rem;
     margin-bottom: 8px;
 }
@@ -25,6 +25,6 @@
 }
 
 .main-header img {
-    height: 50px;
+    height: 60px;
     margin: 6px;
 }

@@ -1,6 +1,5 @@
 //create websocket
-var socket = new WebSocket("ws://localhost/events/");
-var socket = new WebSocket("ws://localhost/anderedingen/");
+var socket = new WebSocket("ws://localhost:8080/events/");
 
 socket.onopen = () => {
     console.log("Websocket is now open!");
