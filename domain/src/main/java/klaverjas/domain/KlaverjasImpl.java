@@ -214,7 +214,8 @@ public class KlaverjasImpl implements Klaverjas {
         if (hasTurn == hasSlagTurn) { //player's slagturn determines the suit
             setPickedSuit(card.getSuit());
             return true; //move is always allowed
-        } else {//other player turn than the player who started the slag
+        }
+        else {//other player turn than the player who started the slag
             if (isPickedSuit(card.getSuit())) { //a card with the suit corresponding to picked_suit
                 if (isPickedTrump(card.getSuit())) { //if the suit is the trump suit
                     if (card.getValue() < highestvalue && isHigherValueInHand()) { //if played card value is lower than the highest value on table, and high is avaiable in hand
@@ -225,13 +226,17 @@ public class KlaverjasImpl implements Klaverjas {
                 } else {
                     return true;
                 }
-            } else if (isSuitInHand(picked_suit)) { //if you have picked_suit in hand, you always have to follow!
+            }
+            else if (isSuitInHand(picked_suit)) { //if you have picked_suit in hand, you always have to follow!
                 return false;
-            } else if (!isSuitInHand(picked_suit)) { //suit is not in players hand
+            }
+            else if (!isSuitInHand(picked_suit)) { //suit is not in players hand
 
                 if (Math.abs(hasTurn - hasslag) == 2) { //if slag is on his mate, player can play any card
                     return true;
-                } else if (isSuitInHand(picked_trump)) { //else, if player has trump cards in hand
+                }
+
+                else if (isSuitInHand(picked_trump)) { //else, if player has trump cards in hand
                     if (card.getSuit() == picked_trump) { //if suit of picked card is trump
                         if (card.getValue() < highestvalue && isHigherValueInHand()) { //if card is played lower in value, and higher value is still in hand
                             return false; //now allowed
@@ -241,6 +246,7 @@ public class KlaverjasImpl implements Klaverjas {
                             return false; //we are not allowed to play trump cards which are lower than the played trump, unless only trump cards are present in hand
                         }
                     }
+
                     else if(card.getSuit() != picked_trump && !isHigherValueInHand()) { //if played card is not trump, but we don't have any higher card, we can play it!
                         return true;
                     }
@@ -249,6 +255,7 @@ public class KlaverjasImpl implements Klaverjas {
                     }
 
                 }
+
                 else if (!isSuitInHand(picked_trump)) { //if player has no trump, he can play any card!
                     return true;
                 }

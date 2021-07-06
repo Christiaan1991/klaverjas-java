@@ -6,6 +6,52 @@
   --cardHeight:  7.8em;
 }
 
+.EmptyCard {
+  display: inline-block;
+  width: var(--cardWidth);
+  height: 6.9em;
+  border: 3px solid #667;
+  border-radius: .3em;
+  -moz-border-radius: .3em;
+  -webkit-border-radius: .3em;
+  -khtml-border-radius: .3em;
+  padding: .25em;
+  margin: 0 .5em .5em 0;
+  text-align: center;
+  font-size: 1.0em; /* @change: adjust this value to make bigger or smaller cards */
+  font-weight: normal;
+  font-family: Tahoma, sans-serif;
+  position: relative;
+  background-color: #fff;
+  -moz-box-shadow: .2em .2em .5em #333;
+  -webkit-box-shadow: .2em .2em .5em #333;
+  box-shadow: .2em .2em .5em #333;
+}
+
+.EmptyCardSide {
+  transform: rotate(90deg);
+  position: fixed;
+  display: inline-block;
+  width: var(--cardWidth);
+  height: 6.9em;
+  border: 3px solid #667;
+  border-radius: .3em;
+  -moz-border-radius: .3em;
+  -webkit-border-radius: .3em;
+  -khtml-border-radius: .3em;
+  padding: .25em;
+  margin: 0 .5em .5em 0;
+  text-align: center;
+  font-size: 1.0em; /* @change: adjust this value to make bigger or smaller cards */
+  font-weight: normal;
+  font-family: Tahoma, sans-serif;
+  position: relative;
+  background-color: #fff;
+  -moz-box-shadow: .2em .2em .5em #333;
+  -webkit-box-shadow: .2em .2em .5em #333;
+  box-shadow: .2em .2em .5em #333;
+}
+
 .backCard {
   background:  url(blue_back.jpg) no-repeat center center;
   background-size: calc(120px * var(--deckSize));
@@ -31,30 +77,9 @@
   box-shadow: .2em .2em .5em #333;
 }
 
-.backCardSide {
-  background:  url(blue_back.jpg) no-repeat center center;
-  background-size: calc(120px * var(--deckSize));
+.Side {
   transform: rotate(90deg);
 
-  display: inline-block;
-  vertical-align: middle;
-  height: 6.9em;
-  width: var(--cardWidth);
-
-  border: 3px solid #667;
-  border-radius: .3em;
-  -moz-border-radius: .3em;
-  -webkit-border-radius: .3em;
-  -khtml-border-radius: .3em;
-  margin: 0 .25em .5em 0;
-  font-size: 1.0em; /* @change: adjust this value to make bigger or smaller cards */
-  font-weight: normal;
-  font-family: Tahoma, sans-serif;
-  position: relative;
-  background-color: #fff;
-  -moz-box-shadow: .2em .2em .5em #333;
-  -webkit-box-shadow: .2em .2em .5em #333;
-  box-shadow: .2em .2em .5em #333;
 }
 
 .Card00, .Card01, .Card02, .Card03, .Card10, .Card11, .Card12, .Card13, .Card20, .Card21, .Card22, .Card23, .Card30, .Card31, .Card32, .Card33, .Card40, .Card41, .Card42, .Card43, .Card50, .Card51, .Card52, .Card53, .Card60, .Card61, .Card62, .Card63, .Card70, .Card71, .Card72, .Card73 {
@@ -81,15 +106,10 @@
   box-shadow: .2em .2em .5em #333;
 }
 
+
 .Card00 {
   background: url(7D.jpg) no-repeat center center;
   background-size: calc(101px * var(--deckSize));
-}
-
-.Card00:hover {
-  background: url(7D.jpg) no-repeat center center;
-  background-size: calc(101px * var(--deckSize));
-  position: relative; bottom: 20px;
 }
 
 .Card10 {
@@ -245,6 +265,10 @@
 .Card73 {
   background: url(AH.jpg) no-repeat center center;
   background-size: calc(101px * var(--deckSize));
+}
+
+.Display:hover {
+  position: relative; bottom: 20px;
 }
 
 /** end */
