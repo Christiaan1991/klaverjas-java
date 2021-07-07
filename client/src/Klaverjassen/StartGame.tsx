@@ -53,7 +53,6 @@ function StartGame({ setGameState }: StartGameProps) {
                 }
 
                 else{
-                    console.log("komt hier");
                     return (
                         <body>
                         <h1>Welcome to Christiaan's klaverjas application!</h1>

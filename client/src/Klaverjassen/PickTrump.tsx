@@ -70,14 +70,22 @@ export function PickTrump({ gameState, setGameState }: PlayProps) {
                         <th>{gameState.players[1].name} and {gameState.players[3].name}</th>
                     </tr>
                      <tr>
-                        <td>{gameState.players[0].score + gameState.players[2].score}</td>
-                        <td>{gameState.players[1].score + gameState.players[3].score}</td>
+                        {getTrumpScore(0,2) == 0 ? <td>{getScore(0,2)}</td> : <td>{getScore(0,2)} + {getTrumpScore(0,2)}</td>}
+                        {getTrumpScore(1,3) == 0 ? <td>{getScore(1,3)}</td> : <td>{getScore(1,3)} + {getTrumpScore(1,3)}</td>}
                     </tr>
                     <tr>
                         <td>{gameState.team1score}</td>
                         <td>{gameState.team2score}</td>
                     </tr>
                 </table>
+    }
+
+    function getScore(p1, p2){
+        return gameState.players[p1].score + gameState.players[p2].score
+    }
+
+    function getTrumpScore(p1, p2){
+        return gameState.players[p1].trumpscore + gameState.players[p2].trumpscore
     }
 
     function DisplayCard({suit, rank} : CardDisplayProps){

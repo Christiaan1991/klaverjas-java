@@ -17,6 +17,7 @@ public class KlaverjasImpl implements Klaverjas {
     private int picked_trump = 100; //value which is not realistic, until set!
     private int highestvalue = 0;
     private int hasslag;
+    private int limitscore = 500;
 
     public KlaverjasImpl(){
         //create team 1 and team 2
@@ -67,12 +68,12 @@ public class KlaverjasImpl implements Klaverjas {
 
     public boolean isPickedTrump(int trump){
         if(trump == picked_trump){ return true; }
-        else{ return false;}
+        return false;
     }
 
     public boolean isPickedSuit(int suit){
         if(suit == picked_suit){ return true; }
-        else{ return false;}
+        return false;
     }
 
     public void pickTrump(int trump){
@@ -117,9 +118,14 @@ public class KlaverjasImpl implements Klaverjas {
             if(isEndOfRound()){ //if end of round
                 setTeamScore(); //determine if team is nat/pit, we add points from players to team, and set players scores back to 0
                 picked_trump = 100; //reset picked_trump
+                if(isEndOfGame()){ //check if end of game
+                    System.out.println("Klaverjas game ends!");
+                }
+
                 nextRoundTurn();
                 getDeck().shuffleDeck(); //shuffle deck
                 deal(); //deal cards
+                sortHands(); //sort hands of players
             }
         }
         else { //move not allowed, so put playedcard back in the hand
@@ -139,21 +145,13 @@ public class KlaverjasImpl implements Klaverjas {
     }
 
     public boolean isEndOfSlag(){
-        if(hasTurn == hasSlagTurn){//at end of slag, person who started slag has the turn
-            return true;
-        }
-        else{
-            return false;
-        }
+        if(hasTurn == hasSlagTurn){ return true; } //at end of slag, person who started slag has the turn
+        return false;
     }
 
     public boolean isEndOfRound(){
-        if(players[hasTurn].hand.size() == 0){//at end of round, person who now has the turn does not have any cards in his hand!
-            return true;
-        }
-        else{
-            return false;
-        }
+        if(players[hasTurn].hand.size() == 0){ return true; } //at end of round, person who now has the turn does not have any cards in his hand!
+        return false;
     }
 
     public boolean isHigherValueInHand(){
@@ -166,10 +164,9 @@ public class KlaverjasImpl implements Klaverjas {
     }
 
     public void resetPlayerCards(){
-        players[0].resetPlayerCard();
-        players[1].resetPlayerCard();
-        players[2].resetPlayerCard();
-        players[3].resetPlayerCard();
+        for(Player player : players){
+            player.resetPlayerCard();
+        }
 
     }
 
@@ -184,20 +181,14 @@ public class KlaverjasImpl implements Klaverjas {
             players[(hasRoundTurn+2) % 4].resetScores();
         }
 
-        if(hasPit()){
-            //add 100 extra points to score
-            players[hasRoundTurn].addScore(100);
-        }
+        if(hasPit()){ players[hasRoundTurn].addScore(100); }
 
         //add scores from players to each team, and reset score and trump score of each player
-        team1_score = getTeamScore(0);
-        team2_score = getTeamScore(1);
+        team1_score =+ getTeamScore(0);
+        team2_score =+ getTeamScore(1);
 
         //reset players scores
-        players[0].resetScores();
-        players[1].resetScores();
-        players[2].resetScores();
-        players[3].resetScores();
+        for(Player player : players){ player.resetScores(); }
     }
 
     public boolean isSuitInHand(int picked_suit){
@@ -303,7 +294,6 @@ public class KlaverjasImpl implements Klaverjas {
 
     }
 
-    //sort cards by rank and suit, from low to high
     public Card[] sortByRank(Card[] cards){
         for(int i = 0; i < cards.length; i++){
             for(int j = i+1; j < cards.length; j++){
@@ -373,39 +363,23 @@ public class KlaverjasImpl implements Klaverjas {
 
     public boolean hasLastSlag(){
         //if laatste slag, player has no cards anymore in hand
-        if(isEndOfRound()) {
-            return true;
-        } else{
-            return false;
-        }
+        if(isEndOfRound()) { return true; }
+        return false;
     }
 
     public boolean isNat(){
-
         //calculate total score
         int score = getTeamScore(hasRoundTurn);
         int score2 = getTeamScore(hasRoundTurn + 1);
-        if(score <= score2){ //team who hasRoundTurn did not get enough points!
-            return true;
-        }
-        else{
-            return false;
-        }
+        if(score <= score2){ return true; } //team who hasRoundTurn did not get enough points!
+        return false;
     }
 
     public boolean hasPit(){
-
         //calculate total score
         int score2 = getTeamScore(hasRoundTurn + 1);
-
-        if(score2 == 0){
-            return true;
-        }
-        else{
-            return false;
-        }
-
-        //tegenpit is just 162 points, not 100 points extra
+        if(score2 == 0){ return true; }
+        return false;
     }
 
     public int getTeamScore(int team){
@@ -414,32 +388,20 @@ public class KlaverjasImpl implements Klaverjas {
 
     @Override
     public boolean isPlayersTurn(int player) {
-        if(player == hasTurn){
-            return true;
-        }
-        else{
+        if(player == hasTurn){ return true; }
             return false;
-        }
     }
 
     @Override
     public boolean isPlayersSlagTurn(int player) {
-        if(player == hasSlagTurn){
-            return true;
-        }
-        else{
+        if(player == hasSlagTurn){ return true; }
             return false;
-        }
     }
 
     @Override
     public boolean isPlayersRoundTurn(int player) {
-        if(player == hasRoundTurn){
-            return true;
-        }
-        else{
-            return false;
-        }
+        if(player == hasRoundTurn){ return true; }
+        return false;
     }
 
     public void setPlayersTurn(int player) { hasTurn = player;}
@@ -461,14 +423,14 @@ public class KlaverjasImpl implements Klaverjas {
     }
 
     public void nextRoundTurn(){ //create one method for both turns
-        int newTurn = 0;
+        int newTurn;
         if(hasRoundTurn == PLAYER_ONE){
             newTurn = PLAYER_TWO;
         } else if(hasRoundTurn == PLAYER_TWO){
             newTurn = PLAYER_THREE;
         } else if(hasRoundTurn == PLAYER_THREE){
             newTurn = PLAYER_FOUR;
-        } else if(hasRoundTurn == PLAYER_FOUR){
+        } else {
             newTurn = PLAYER_ONE;
         }
         hasRoundTurn = newTurn;
@@ -477,6 +439,14 @@ public class KlaverjasImpl implements Klaverjas {
     }
 
     public boolean isEndOfGame(){
+        if(team1_score >= limitscore){
+            winner = TEAM_ONE;
+            return true;
+        }
+        else if(team2_score >= limitscore){
+            winner = TEAM_TWO;
+            return true;
+        }
         return false;
     }
 

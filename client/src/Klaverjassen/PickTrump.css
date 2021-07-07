@@ -104,6 +104,10 @@ table {
   width: 30%
 }
 
+.scoretable td {
+  text-align: center;
+}
+
 .status {
   position: absolute;
   top: 230px;

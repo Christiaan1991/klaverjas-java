@@ -584,32 +584,32 @@ class klaverjastest {
 
         }
 
-//        @Test
-//        @DisplayName("If no choice, you can undertrump")
-//        void you_can_undertrump() throws Exception{
-//            Card[] cards1 = {new Card(4, 1),new Card(4, 2)};
-//            Card[] cards2 = {new Card(3, 2),new Card(5, 0)};
-//            Card[] cards3 = {new Card(2, 2),new Card(7, 0)};
-//            Card[] cards4 = {new Card(1, 0),new Card(0, 0)};
-//            klaverjas.getPlayers()[0].setHand(cards1);
-//            klaverjas.getPlayers()[1].setHand(cards2);
-//            klaverjas.getPlayers()[2].setHand(cards3);
-//            klaverjas.getPlayers()[3].setHand(cards4);
-//
-//            klaverjas.pickTrump(0);
-//            klaverjas.move(4,1); //allowed J suit
-//            klaverjas.move(5,0); //allowed Q troef
-//            klaverjas.move(7,0); //allowed A troef
-//            klaverjas.move(0,0); //allowed 7 troef since no other troef
-//
-//            //player 2 wins slag
-//            assertTrue(klaverjas.isPlayersTurn(Klaverjas.PLAYER_THREE));
-//            assertEquals(0, klaverjas.getPlayers()[0].getScore());
-//            assertEquals(0, klaverjas.getPlayers()[1].getScore());
-//            assertEquals(0, klaverjas.getPlayers()[2].getScore());
-//            assertEquals(0, klaverjas.getPlayers()[3].getScore());
-//
-//        }
+        @Test
+        @DisplayName("If no choice, you can undertrump")
+        void you_can_undertrump() throws Exception{
+            Card[] cards1 = {new Card(4, 1),new Card(4, 2)};
+            Card[] cards2 = {new Card(3, 2),new Card(5, 0)};
+            Card[] cards3 = {new Card(2, 2),new Card(7, 0)};
+            Card[] cards4 = {new Card(1, 0),new Card(0, 0)};
+            klaverjas.getPlayers()[0].setHand(cards1);
+            klaverjas.getPlayers()[1].setHand(cards2);
+            klaverjas.getPlayers()[2].setHand(cards3);
+            klaverjas.getPlayers()[3].setHand(cards4);
+
+            klaverjas.pickTrump(0);
+            klaverjas.move(4,1); //allowed J suit
+            klaverjas.move(5,0); //allowed Q troef
+            klaverjas.move(7,0); //allowed A troef
+            klaverjas.move(0,0); //allowed 7 troef since no other troef
+
+            //player 2 wins slag
+            assertTrue(klaverjas.isPlayersTurn(Klaverjas.PLAYER_THREE));
+            assertEquals(0, klaverjas.getPlayers()[0].getScore());
+            assertEquals(0, klaverjas.getPlayers()[1].getScore());
+            assertEquals(0, klaverjas.getPlayers()[2].getScore());
+            assertEquals(0, klaverjas.getPlayers()[3].getScore());
+
+        }
 
     }
 
