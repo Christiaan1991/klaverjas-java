@@ -1,10 +1,5 @@
 To do list for the klaverjassen application:
 
-
-- Improve scoring table (show extra points using "+ Roem")
-- Add an error field when you cannot play a card
-- Backend: sort after a slag/round of klaverjassen has been played
-- Backend: Make sure that opponents can also undertrump when they cannot play anything else
 - Production: create a link where the application can be played from
 - Extra: Connect to database to keep track of score
 - Extra: pick till how many points you want to play, and randomize players together

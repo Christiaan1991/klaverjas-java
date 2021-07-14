@@ -606,7 +606,7 @@ class klaverjastest {
             assertTrue(klaverjas.isPlayersTurn(Klaverjas.PLAYER_THREE));
             assertEquals(0, klaverjas.getPlayers()[0].getScore());
             assertEquals(0, klaverjas.getPlayers()[1].getScore());
-            assertEquals(0, klaverjas.getPlayers()[2].getScore());
+            assertEquals(11 + 3 + 2, klaverjas.getPlayers()[2].getScore());
             assertEquals(0, klaverjas.getPlayers()[3].getScore());
 
         }
@@ -816,7 +816,7 @@ class klaverjastest {
             klaverjas.getPlayers()[2].setScore(0);
             klaverjas.getPlayers()[3].setScore(0);
 
-            klaverjas.setTeamScore();
+            klaverjas.determineTeamScores();
 
             //team 1 is nat, giving all the points to team 2
             assertEquals(0, klaverjas.getTeam1Score());
@@ -836,7 +836,7 @@ class klaverjastest {
             klaverjas.getPlayers()[2].setScore(0);
             klaverjas.getPlayers()[3].setScore(0);
 
-            klaverjas.setTeamScore();
+            klaverjas.determineTeamScores();
 
             //team 1 is nat, giving all the points to team 2
             assertEquals(282, klaverjas.getTeam1Score());
@@ -868,6 +868,47 @@ class klaverjastest {
             //player 3 wins slag, and gets 10 points extra for the laatste slag, plus 20 for roem and plus 100 for pit
             assertEquals(11 + 10 + 2 + 3 + 10 + 20 + 100, klaverjas.getTeam1Score());
             assertEquals(0, klaverjas.getTeam2Score());
+
+        }
+    }
+
+
+    @Nested
+    @DisplayName("End of game")
+    class End_of_Game {
+
+        KlaverjasImpl klaverjas = new KlaverjasImpl();
+
+        @Test
+        @DisplayName("There is a winner")
+        void Winner() throws Exception {
+
+            klaverjas.setTeam1Score(1499);
+            klaverjas.setTeam2Score(1499);
+
+            //setup hands of players
+            Card[] cards1 = {new Card(4, 1)}; //J
+            Card[] cards2 = {new Card(3, 1)}; //10
+            Card[] cards3 = {new Card(7, 1)}; //A
+            Card[] cards4 = {new Card(5, 1)}; //Q
+
+            klaverjas.getPlayers()[0].setHand(cards1);
+            klaverjas.getPlayers()[1].setHand(cards2);
+            klaverjas.getPlayers()[2].setHand(cards3);
+            klaverjas.getPlayers()[3].setHand(cards4);
+
+            klaverjas.pickTrump(0); //1 is now trump
+            //play move
+            klaverjas.move(4, 1); //J, 2 points
+            klaverjas.move(3, 1); //10, 10 poins
+            klaverjas.move(7, 1); //A, 11 points
+            klaverjas.move(5, 1); //Q, 3 points
+
+            //player 3 wins slag, and gets 10 points extra for the laatste slag, 100 for pit, and 1499 from previous hand
+            assertEquals(11 + 10 + 2 + 3 + 10 + 20 + 100 + 1499, klaverjas.getTeam1Score());
+
+            //more than 1500 points, so team one wins!
+            assertEquals(klaverjas.TEAM_ONE, klaverjas.getWinner());
 
         }
     }

@@ -17,14 +17,14 @@ export function PickTrump({ gameState, setGameState }: PlayProps) {
 
     const [errorMessage, setErrorMessage] = useState("");
 
+    //sort cards of the players in hand
+    sortCards();
+
     return (
         <body>
             <Board/>
-
             <ScoreTable/>
-
             <div className="status">{getStatus()}, please select a Trump!</div>
-
             <p className="errorMessage"><b>{errorMessage}</b></p>
         </body>
     )
@@ -38,12 +38,12 @@ export function PickTrump({ gameState, setGameState }: PlayProps) {
                          </div>
                      </div>
                      <div className="p2">
-                         <div>{gameState.players[(gameState.ws_id+1) % 4].name}</div>
+                         <div className="namep2">{gameState.players[(gameState.ws_id+1) % 4].name}</div>
                          {gameState.players[(gameState.ws_id+1) % 4].cards.reverse().map((card) => 
                          <p><BackCardSide/></p>)}
                      </div>
                      <div className="p3">
-                         <div>{gameState.players[(gameState.ws_id+2) % 4].name}</div>
+                         <div className="namep3">{gameState.players[(gameState.ws_id+2) % 4].name}</div>
                          <div>{gameState.players[(gameState.ws_id+2) % 4].cards.reverse().map((card) => 
                              <BackCard/>)}
                          </div>                    
@@ -80,12 +80,33 @@ export function PickTrump({ gameState, setGameState }: PlayProps) {
                 </table>
     }
 
-    function getScore(p1, p2){
+    function getScore(p1: number, p2: number){
         return gameState.players[p1].score + gameState.players[p2].score
     }
 
-    function getTrumpScore(p1, p2){
+    function getTrumpScore(p1: number, p2: number){
         return gameState.players[p1].trumpscore + gameState.players[p2].trumpscore
+    }
+
+    function sortCards(){
+        let cards = gameState.players[gameState.ws_id % 4].cards;
+
+        for(let i = 0; i < cards.length; i++){
+            for(let j = i+1; j < cards.length; j++){
+                if(cards[i].value < cards[j].value){
+                    let temp = cards[i];
+                    cards[i] = cards[j];
+                    cards[j] = temp;
+                }
+
+                if(cards[i].suit < cards[j].suit){
+                    let temp = cards[i];
+                    cards[i] = cards[j];
+                    cards[j] = temp;
+                }
+            }
+        }
+        
     }
 
     function DisplayCard({suit, rank} : CardDisplayProps){
@@ -100,7 +121,7 @@ export function PickTrump({ gameState, setGameState }: PlayProps) {
         return <button className="backCard Side"></button>
     }
 
-    async function pickTrump(e: React.FormEvent, picked_trump) {
+    async function pickTrump(e: React.FormEvent, picked_trump: number) {
         e.preventDefault(); 
 
         try {

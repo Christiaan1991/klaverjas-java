@@ -26,6 +26,6 @@ interface Player {
 interface Card {
     rank: number;
     suit: number;
-    name: string;
+    value: number;
     trump: boolean;
 }

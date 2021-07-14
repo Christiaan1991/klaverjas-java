@@ -81,8 +81,6 @@ public class EventSocket extends WebSocketAdapter
                     System.out.println(klaverjas);
                     klaverjas.getDeck().shuffleDeck();
                     klaverjas.deal();
-                    klaverjas.sortHands();
-
                     sendGameState();
                 }
 
@@ -124,6 +122,7 @@ public class EventSocket extends WebSocketAdapter
         //if socket is also in players, remove it in player as well!
         if(players.containsKey(this)){
             players.remove(this);
+            numOfConnectedPlayers--;
         }
 
         System.out.println("Socket Closed: [" + statusCode + "] " + reason);
@@ -172,7 +171,6 @@ public class EventSocket extends WebSocketAdapter
 
         //apply move to the played card
         klaverjas.pickTrump(trump);
-        klaverjas.sortHands();
 
     }
 

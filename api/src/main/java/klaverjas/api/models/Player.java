@@ -16,7 +16,8 @@ public class Player {
 		trumpscore = klaverjas.getPlayers()[player].getTrumpScore();
 
 		if(klaverjas.getPlayers()[player].hasPlayedCard()) {
-			playedCard = new Card(klaverjas.getPlayers()[player].getPlayedCard().getRank(), klaverjas.getPlayers()[player].getPlayedCard().getSuit(), klaverjas.getPickedTrump());
+			klaverjas.domain.Card playedcard = klaverjas.getPlayers()[player].getPlayedCard();
+			playedCard = new Card(playedcard.getRank(), playedcard.getSuit(), playedcard.isTrump());
 		}
 
 		int noOfCards = klaverjas.getPlayers()[player].getHand().size();
@@ -25,12 +26,14 @@ public class Player {
 		//if the player number is the same as the client, we want to show the cards!
 		if(player == ws_id){
 			for(int i = 0; i < noOfCards; i++) {
-				cards[i] = new Card(klaverjas.getPlayers()[player].getHand().get(i).getRank(), klaverjas.getPlayers()[player].getHand().get(i).getSuit(), klaverjas.getPickedTrump());
+				klaverjas.domain.Card card = klaverjas.getPlayers()[player].getHand().get(i);
+				cards[i] = new Card(card.getRank(), card.getSuit(), card.isTrump());
 			}
 		}
-		else{ for(int i = 0; i < noOfCards; i++) {
+		else{
+			for(int i = 0; i < noOfCards; i++) {
 				//create empty card
-				cards[i] = new Card(-1, -1, -1);
+				cards[i] = new Card();
 			}
 		}
 

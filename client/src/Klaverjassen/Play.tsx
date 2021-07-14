@@ -18,13 +18,13 @@ export function Play({ gameState, setGameState }: PlayProps) {
 	const [errorMessage, setErrorMessage] = useState("");
 
     console.log(gameState);
+    sortCards();
+
     return (
         <body>
             <Board/>
 
             <ScoreTable/>
-
-            <div className="trump">{getTrump()}</div>
 
             <div className="status">{getStatus()}, It is your turn!</div>
 
@@ -49,9 +49,9 @@ export function Play({ gameState, setGameState }: PlayProps) {
                      </div>
                      <div className="p3">
                          <div>{gameState.players[(gameState.ws_id+2) % 4].name}</div>
-                         <div>{gameState.players[(gameState.ws_id+2) % 4].cards.reverse().map((card) => 
+                         <p>{gameState.players[(gameState.ws_id+2) % 4].cards.reverse().map((card) => 
                              <BackCard/>)}
-                         </div>                    
+                         </p>                    
                      </div>
                      <div className="p4">
                          <div>{gameState.players[(gameState.ws_id+3) % 4].name}</div>
@@ -70,9 +70,9 @@ export function Play({ gameState, setGameState }: PlayProps) {
                     <div className="p8">
                         <div>{gameState.players[(gameState.ws_id+3) % 4].playedCard == null ? <PlayedEmptyCardSide/> : <PlayedCardSide suit={gameState.players[(gameState.ws_id+3) % 4].playedCard.suit} rank={gameState.players[(gameState.ws_id+3) % 4].playedCard.rank} />}</div>
                     </div>
-{/*                    <div className="p9">
-                        <button className="block" >{getTrump()}</button>
-                    </div>*/}
+                    <div className="p9">
+                        <div className="trump">{getTrump()}</div>
+                    </div>
                 </div>
 
     }
@@ -94,12 +94,34 @@ export function Play({ gameState, setGameState }: PlayProps) {
                 </table>
     }
 
-    function getScore(p1, p2){
+
+    function getScore(p1: number, p2: number){
         return gameState.players[p1].score + gameState.players[p2].score
     }
 
-    function getTrumpScore(p1, p2){
+    function getTrumpScore(p1: number, p2: number){
         return gameState.players[p1].trumpscore + gameState.players[p2].trumpscore
+    }
+
+    function sortCards(){
+        let cards = gameState.players[gameState.ws_id % 4].cards;
+
+        for(let i = 0; i < cards.length; i++){
+            for(let j = i+1; j < cards.length; j++){
+                if(cards[i].value < cards[j].value){
+                    let temp = cards[i];
+                    cards[i] = cards[j];
+                    cards[j] = temp;
+                }
+
+                if(cards[i].suit < cards[j].suit){
+                    let temp = cards[i];
+                    cards[i] = cards[j];
+                    cards[j] = temp;
+                }
+            }
+        }
+        
     }
 
     function DisplayCard({suit, rank} : CardDisplayProps){
