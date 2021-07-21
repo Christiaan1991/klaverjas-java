@@ -883,8 +883,8 @@ class klaverjastest {
         @DisplayName("There is a winner")
         void Winner() throws Exception {
 
-            klaverjas.setTeam1Score(1499);
-            klaverjas.setTeam2Score(1499);
+            klaverjas.setTeam1Score(99);
+            klaverjas.setTeam2Score(99);
 
             //setup hands of players
             Card[] cards1 = {new Card(4, 1)}; //J
@@ -905,10 +905,11 @@ class klaverjastest {
             klaverjas.move(5, 1); //Q, 3 points
 
             //player 3 wins slag, and gets 10 points extra for the laatste slag, 100 for pit, and 1499 from previous hand
-            assertEquals(11 + 10 + 2 + 3 + 10 + 20 + 100 + 1499, klaverjas.getTeam1Score());
+            assertEquals(11 + 10 + 2 + 3 + 10 + 20 + 100 + 99, klaverjas.getTeam1Score());
 
             //more than 1500 points, so team one wins!
             assertEquals(klaverjas.TEAM_ONE, klaverjas.getWinner());
+            assertTrue(klaverjas.isEndOfGame());
 
         }
     }

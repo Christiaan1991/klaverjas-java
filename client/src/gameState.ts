@@ -3,6 +3,7 @@ export interface GameState {
     players: [Player, Player, Player, Player]; // a player array contains exactly four Players
     gameStatus: {
         endOfGame: boolean;
+        winner: string;
     };
     num_of_cards: [number, number, number];
     team1score: number;

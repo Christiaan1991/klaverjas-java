@@ -17,7 +17,7 @@ public class KlaverjasImpl implements Klaverjas {
     private int picked_trump = 100; //value which is not realistic, until set!
     private int highestvalue = 0;
     private int hasSlag;
-    private int limitscore = 500;
+    private int limitscore = 100;
 
     public KlaverjasImpl(){
         //create team 1 and team 2
